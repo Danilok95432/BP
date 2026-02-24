@@ -86,23 +86,11 @@ export const NewsSection: FC<NewsProps> = ({ id }) => {
 		return () => window.removeEventListener('resize', handleResize)
 	}, [])
 
-	const [activeIndex, setActiveIndex] = useState(0)
+	const [, setActiveIndex] = useState(0)
 
 	const handleSlideChange = (swiper: SwiperType) => {
 		setActiveIndex(swiper.activeIndex)
 	}
-
-	const getButtonColors = () => {
-		const isFirstSlide = activeIndex === 0
-		const isLastSlide = newsList ? activeIndex === newsList.length - 2 : false
-
-		return {
-			prevBtnColor: isFirstSlide ? '#00000040' : '#000',
-			nextBtnColor: isLastSlide ? '#00000040' : '#000',
-		}
-	}
-
-	const { prevBtnColor, nextBtnColor } = getButtonColors()
 
 	return (
 		<Section id='news' className={cn(styles.news)}>
@@ -153,9 +141,8 @@ export const NewsSection: FC<NewsProps> = ({ id }) => {
 						<SliderBtns
 							className={styles.newsSliderBtns}
 							swiperRef={swiperRef}
-							color={'#fff'}
-							nextBtnColor={nextBtnColor}
-							prevBtnColor={prevBtnColor}
+							nextBtnColor={'transparent'}
+							prevBtnColor={'transparent'}
 						/>
 					</>
 				)}

@@ -3,56 +3,53 @@ import { FlexRow } from '../FlexRow/FlexRow'
 import styles from './index.module.scss'
 import { VkSocialSvg } from '../icons/vkSocialSVG'
 import { TelegramSocialSvg } from '../icons/telegramSocialSVG'
-import { RutubeSocialSvg } from '../icons/rutubeSocialSVG'
+import { SeparatorIconSVG } from '../icons/separatorIconSVG'
+import cn from 'classnames'
+import { navigationElements } from './consts'
+import { useNavigate } from 'react-router-dom'
 
 export const Footer = () => {
+	const navigate = useNavigate()
 	return (
 		<footer className={styles.footer}>
 			<Container>
 				<FlexRow className={styles.footerCont}>
-					<FlexRow className={styles.topRow}>
-						<p>{'РОО «ТОЛК»'}</p>
-					</FlexRow>
-					<FlexRow className={styles.bottomRow}>
-						<FlexRow className={styles.contactsRow}>
-							<FlexRow className={styles.infoRow}>
-								<FlexRow className={styles.infoEl}>
-									<p className={styles.title}>Телефон</p>
-									<p>{'8 (999) 999-99-99'}</p>
-								</FlexRow>
-								<FlexRow className={styles.infoEl}>
-									<p className={styles.title}>Электронная почта</p>
-									<p>{'npotau@npotau.ru'}</p>
-								</FlexRow>
-								<FlexRow className={styles.infoEl}>
-									<p className={styles.title}>Адрес</p>
-									<p>{'392003, г. Тамбов, б-р Энтузиастов, д. 2А, этаж 4'}</p>
-								</FlexRow>
-							</FlexRow>
-							<FlexRow className={styles.socialsRow}>
-								<FlexRow className={styles.socialEl}>
-									<VkSocialSvg />
-								</FlexRow>
-								<FlexRow className={styles.socialEl}>
-									<TelegramSocialSvg />
-								</FlexRow>
-								<FlexRow className={styles.socialEl}>
-									<RutubeSocialSvg />
-								</FlexRow>
-							</FlexRow>
+					<FlexRow className={styles.navRow}>
+						<div className={styles.wrapper}>
+							<ul className={styles.navWrapper}>
+								{navigationElements.map((el, index) => (
+									<button key={index} className={styles.navEl} onClick={() => navigate(el.link)}>
+										<li className={cn({ [styles.active]: location.pathname.includes(el.link) })}>
+											{el.title}
+										</li>
+									</button>
+								))}
+							</ul>
+							<button
+								className={styles.personMenu}
+								aria-label='Лаборатория Доуэля'
+								title='Лаборатория Доуэля'
+							>
+								<SeparatorIconSVG color='#fff' />
+								<p>Лаборатория Доуэля</p>
+							</button>
+						</div>
+						<FlexRow className={styles.socialsRow}>
+							<div className={styles.socialEl}>
+								<VkSocialSvg color='#fff' />
+							</div>
+							<div className={styles.socialEl}>
+								<TelegramSocialSvg color='#fff' />
+							</div>
 						</FlexRow>
-						<FlexRow className={styles.bottomInfo}>
-							<FlexRow className={styles.author}>
-								<p className={styles.title}>© Федерация этноспорта России, 2026</p>
-								<p>
-									Cвидетельство о регистрации средства массовой информации Эл № ФС77 - 37229 от 14
-									августа 2009 г. Выдано Федеральной службой по надзору в сфере связи,
-									информационных технологий и массовых коммуникаций (Роскомнадзор).
-								</p>
-							</FlexRow>
-							<FlexRow className={styles.developer}>
-								<p>Разработано и построено в НПО ТАУ. Платформа Т-6.</p>
-							</FlexRow>
+					</FlexRow>
+					<FlexRow className={styles.bottomInfo}>
+						<FlexRow className={styles.contactsRow}>
+							<p>+7 (925) 314-38-58</p>
+							<p>belyaevprize@gmail.com</p>
+						</FlexRow>
+						<FlexRow className={styles.author}>
+							<p className={styles.title}>© Беляевская премия, 2026</p>
 						</FlexRow>
 					</FlexRow>
 				</FlexRow>

@@ -339,9 +339,13 @@ export const defineFileFormat = (fileName: string) => {
 export const mainFormatDate = (
 	date: Date | string | undefined,
 	dateFormat = 'dd MMMM yyyy',
+	time?: boolean,
 ): string | null => {
 	if (!date) return null
 	const formatedDate = typeof date === 'string' ? new Date(date) : date
+	if (time) {
+		return format(formatedDate, `${dateFormat}, HH:mm`, { locale: ru })
+	}
 	return format(formatedDate, dateFormat, { locale: ru })
 }
 

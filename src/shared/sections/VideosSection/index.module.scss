@@ -1,4 +1,18 @@
 .videos {
+	.cont {
+		.wrapper {
+			.slider {
+				.videoSlide {
+					@media (max-width: 1400px) {
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						margin: 0 auto;
+					}
+				}
+			}
+		}
+	}
 	.videotapeSectionRow {
 		margin: 0 0 20px 0;
 		align-items: center;
@@ -14,23 +28,26 @@
 		}
 		.sectionTitle {
 			font-size: 24px;
-			font-weight: 500;
+			font-weight: 600;
 			@media (max-width: 768px) {
 				font-size: 20px;
 			}
 		}
 	}
 	.allBtn {
+		width: 175px;
 		font-size: 18px;
+		font-weight: 600;
 		padding: 12px 24px;
-		border-radius: 12px;
-		background: var(--main-theme-color);
+		border-radius: 8px;
+		background: var(--main-allBtn-color);
+		color: #000;
 		height: max-content;
 		&:hover {
 			box-shadow: var(--box-shadow);
 		}
 		@media (max-width: 768px) {
-			color: var(--main-link-color);
+			color: #000;
 			background: none;
 			font-size: 16px;
 			padding: 0;
@@ -56,6 +73,9 @@
 	.videoSliderBtns {
 		top: 50%;
 		width: calc(100% + 80px);
+		@media (max-width: 1400px) {
+			width: 100%;
+		}
 		@media (max-width: 768px) {
 			display: none;
 		}

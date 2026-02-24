@@ -1,7 +1,6 @@
 import { type FC } from 'react'
 
 import cn from 'classnames'
-import { Link } from 'react-router-dom'
 
 import styles from './index.module.scss'
 import { EventStatus } from '../event-status/event-status'
@@ -68,9 +67,6 @@ export const EventCard: FC<EventItemProps> = ({
 							{address}
 						</span>
 					</p>
-					{description && (
-						<div className={styles.eventDesc} dangerouslySetInnerHTML={{ __html: description }} />
-					)}
 				</figcaption>
 			</figure>
 		</a>

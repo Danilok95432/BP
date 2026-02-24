@@ -2,7 +2,6 @@ import { Container } from '../../ui/Container/Container'
 import styles from './index.module.scss'
 import cn from 'classnames'
 import { Section } from 'src/shared/ui/Section/section'
-import { SliderBtns } from 'src/widgets/slider-btns/slider-btns'
 import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react'
 import { partnersSliderOptions } from './consts'
 import { type FC, type RefObject, useRef, useState } from 'react'
@@ -23,24 +22,11 @@ export const PartnersSection: FC<PartnersProps> = ({ id }) => {
 	const navigate = useNavigate()
 	const swiperRef: RefObject<SwiperRef> = useRef<SwiperRef>(null)
 
-	const [activeIndex, setActiveIndex] = useState(0)
+	const [, setActiveIndex] = useState(0)
 
 	const handleSlideChange = (swiper: SwiperType) => {
 		setActiveIndex(swiper.activeIndex)
 	}
-
-	const getButtonColors = () => {
-		const isFirstSlide = activeIndex === 0
-		const isLastSlide = eventData?.partnerLinks
-			? activeIndex === eventData?.partnerLinks.length - 2
-			: false
-		return {
-			prevBtnColor: isFirstSlide ? '#00000040' : '#000',
-			nextBtnColor: isLastSlide ? '#00000040' : '#000',
-		}
-	}
-
-	const { prevBtnColor, nextBtnColor } = getButtonColors()
 
 	if (!eventData?.partnerLinks) return ''
 	return (
@@ -89,13 +75,6 @@ export const PartnersSection: FC<PartnersProps> = ({ id }) => {
 							</SwiperSlide>
 						))}
 					</Swiper>
-					<SliderBtns
-						className={styles.partnersSliderBtns}
-						swiperRef={swiperRef}
-						color='#fff'
-						nextBtnColor={nextBtnColor}
-						prevBtnColor={prevBtnColor}
-					/>
 				</div>
 			</Container>
 		</Section>

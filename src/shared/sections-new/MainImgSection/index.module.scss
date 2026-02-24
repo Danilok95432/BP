@@ -1,0 +1,65 @@
+.noPadding {
+	padding: 0;
+	position: relative;
+	.mainImg {
+		width: 100%;
+		height: 100%;
+		max-height: 618px;
+		object-fit: cover;
+		position: absolute;
+		top: 0;
+	}
+}
+.mainWrapper {
+	width: 100%;
+	max-width: 1305px;
+	height: 100%;
+	position: relative;
+	padding: 120px 0px;
+	margin: 0 auto;
+	.imgControls {
+		max-width: 700px;
+		display: flex;
+		gap: 48px;
+		margin-left: 4%;
+		flex-direction: column;
+		h1 {
+			color: var(--additional-theme-color);
+			font-size: 48px;
+		}
+		.controls {
+			flex-direction: column;
+			gap: 24px;
+			.topGroup {
+				flex-direction: row;
+				gap: 24px;
+				.controlBtn {
+					padding: 12px 24px;
+					font-size: 18px;
+					height: 49px;
+				}
+			}
+			.controlBtnSpecial {
+				padding: 12px 24px;
+				font-size: 18px;
+				height: 49px;
+				background: var(--additional-theme-color);
+				color: var(--additional-theme-color-2);
+				font-weight: 600;
+				display: flex;
+				gap: 8px;
+				.customSvgWrapper {
+					position: relative;
+					width: 30px;
+					.smallSvg {
+						width: 12px;
+						height: 16px;
+						position: absolute;
+						top: 0;
+						right: 0;
+					}
+				}
+			}
+		}
+	}
+}

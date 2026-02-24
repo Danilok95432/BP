@@ -37,10 +37,10 @@ export const EventsSection: FC = () => {
 					</MainButton>
 				</FlexRow>
 
-				<div>
+				<div className={styles.wrapper}>
 					<Swiper {...eventsSliderOptions} ref={swiperRef} className={styles.slider}>
 						{homeEvents?.map((slideItem, idx) => (
-							<SwiperSlide key={idx}>
+							<SwiperSlide key={idx} className={styles.slide}>
 								<EventCard className={styles.homeEventCard} {...slideItem} />
 							</SwiperSlide>
 						))}
@@ -49,9 +49,9 @@ export const EventsSection: FC = () => {
 					<SliderBtns
 						className={styles.eventsSliderBtns}
 						swiperRef={swiperRef}
-						color={'#fff'}
-						nextBtnColor='#000'
-						prevBtnColor='#000'
+						color={'#000'}
+						nextBtnColor='transparent'
+						prevBtnColor='transparent'
 					/>
 				</div>
 			</Container>

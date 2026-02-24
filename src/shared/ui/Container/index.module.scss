@@ -1,8 +1,11 @@
 .container {
-  max-width: 1220px;
+  max-width: 1305px;
   margin: 0 auto;
   position: relative;
   width: 100%;
+  @media (max-width: 1339px) {
+    padding: 24px 24px 32px 24px;
+  }
   @media (max-width: 768px) {
     padding: 24px 24px 32px 24px;
   }

@@ -33,42 +33,31 @@ export const VideosSection: FC<VideoProps> = ({ id }) => {
 		return () => window.removeEventListener('resize', handleResize)
 	}, [])
 
-	const [activeIndex, setActiveIndex] = useState(0)
+	const [, setActiveIndex] = useState(0)
 
 	const handleSlideChange = (swiper: SwiperType) => {
 		setActiveIndex(swiper.activeIndex)
 	}
 
-	const getButtonColors = () => {
-		const isFirstSlide = activeIndex === 0
-		const isLastSlide = videos ? activeIndex === videos.length - 2 : false
-
-		return {
-			prevBtnColor: isFirstSlide ? '#00000040' : '#000',
-			nextBtnColor: isLastSlide ? '#00000040' : '#000',
-		}
-	}
-
-	const { prevBtnColor, nextBtnColor } = getButtonColors()
-
 	return (
 		<Section id='video' className={cn(styles.videos)}>
-			<Container off={isMobile}>
+			<Container off={isMobile} className={styles.cont}>
 				<FlexRow className={styles.btnRow}>
 					<h2 className={styles.sectionTitle}>Видеолента</h2>
 					<MainButton className={styles.allBtn} onClick={() => navigate('/content?onlyVideo=1')}>
 						Все видео
 					</MainButton>
 				</FlexRow>
-				<div>
+				<div className={styles.wrapper}>
 					<Swiper
 						{...homeVideosSliderOptions}
 						ref={swiperRef}
 						onSlideChange={handleSlideChange}
 						onInit={(swiper) => setActiveIndex(swiper.activeIndex)}
+						className={styles.slider}
 					>
 						{videos?.map((slideItem, idx) => (
-							<SwiperSlide key={idx}>
+							<SwiperSlide key={idx} className={styles.videoSlide}>
 								<VideoCard key={slideItem.id} {...slideItem} />
 							</SwiperSlide>
 						))}
@@ -76,9 +65,9 @@ export const VideosSection: FC<VideoProps> = ({ id }) => {
 					<SliderBtns
 						className={styles.videoSliderBtns}
 						swiperRef={swiperRef}
-						color={'#fff'}
-						nextBtnColor={nextBtnColor}
-						prevBtnColor={prevBtnColor}
+						color={'#000'}
+						nextBtnColor={'transparent'}
+						prevBtnColor={'transparent'}
 					/>
 				</div>
 			</Container>

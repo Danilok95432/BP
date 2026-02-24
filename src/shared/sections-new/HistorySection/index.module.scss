@@ -1,0 +1,57 @@
+.history {
+	padding: 30px 0 25px 0;
+	.sectionTitle {
+		font-size: 32px;
+		font-weight: 600;
+    margin-bottom: 40px;
+		@media (max-width: 768px) {
+			font-size: 20px;
+		}
+	}
+  :global {
+    .swiper-pagination-bullet-active {
+      background: #000;
+    }
+    .swiper-pagination-bullet {
+      cursor: pointer;
+    }
+  }
+  .paginationContainer {
+    width: max-content;
+    margin: 0 auto;
+    display: flex;
+		justify-content: center;
+    gap: 16px;
+  }
+	.historyList {
+		gap: 19px;
+		flex-wrap: nowrap;
+    margin-bottom: 24px;
+		.historyEl {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			.titleRow {
+				gap: 4px;
+				align-items: center;
+				p {
+					font-size: 44px;
+					font-weight: 300;
+				}
+			}
+			p {
+				font-size: 16px;
+				max-height: 66px;
+				overflow: hidden;
+				line-clamp: 2;
+				text-overflow: ellipsis;
+			}
+		}
+		.eventsSliderBtns {
+			top: 40%;
+			button {
+				background: #ffffff79;
+			}
+		}
+	}
+}
