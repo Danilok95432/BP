@@ -17,6 +17,9 @@
 	position: relative;
 	padding: 120px 0px;
 	margin: 0 auto;
+	@media (max-width: 768px) {
+		padding: 60px 0;
+	}
 	.imgControls {
 		max-width: 700px;
 		display: flex;
@@ -26,6 +29,12 @@
 		h1 {
 			color: var(--additional-theme-color);
 			font-size: 48px;
+			@media (max-width: 768px) {
+				font-size: 32px;
+			}
+			@media (max-width: 420px) {
+				max-width: 320px;
+			}
 		}
 		.controls {
 			flex-direction: column;

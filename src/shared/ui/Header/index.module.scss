@@ -21,6 +21,10 @@
 					max-width: 321px;
 					font-size: 22px;
 					font-weight: 600;
+					@media (max-width: 768px) {
+						font-size: 12px;
+						max-width: 140px;
+					}
 				}
 			}
 		}
@@ -33,13 +37,18 @@
 				color: #cc1746;
 				font-size: 14px;
 				border: 1px solid #cc1746;
-        padding: 0px 10px;
+				padding: 0px 10px;
 				border-radius: 5px;
 			}
 			@media (max-width: 1340px) {
 				flex-direction: row;
 				align-items: center;
 				justify-content: center;
+			}
+			a.search {
+				@media (max-width: 768px) {
+					display: none;
+				}
 			}
 			.enterLK {
 				display: flex;

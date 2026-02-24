@@ -43,6 +43,9 @@
 
 .news {
 	padding: 27px 0 11px;
+	@media (max-width: 768px) {
+		padding: 0;
+	}
 	.newsSlider {
 		position: relative;
 		padding: 5px;

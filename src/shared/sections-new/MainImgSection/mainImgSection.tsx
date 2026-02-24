@@ -3,13 +3,20 @@ import { Section } from 'src/shared/ui/Section/section'
 import styles from './index.module.scss'
 import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
 import main from 'src/assets/img/main.png'
+import imgMobile from 'src/assets/img/imgMobile.png'
 import { MainButton } from 'src/shared/ui/MainButton/MainButton'
 import { SeparatorIconSVG } from 'src/shared/ui/icons/separatorIconSVG'
+import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
 
 export const MainImgSection = () => {
+	const breakPoint = useBreakPoint()
 	return (
 		<Section className={styles.noPadding}>
-			<img className={styles.mainImg} src={main} alt='' />
+			{breakPoint === 'S' ? (
+				<img className={styles.mainImg} src={imgMobile} alt='' />
+			) : (
+				<img className={styles.mainImg} src={main} alt='' />
+			)}
 			<div className={styles.mainWrapper}>
 				<FlexRow className={styles.imgControls}>
 					<h1>Международная литературная премия имени Александра Беляева</h1>

@@ -10,13 +10,16 @@ import logo from 'src/assets/img/logo-bp.png'
 import logoMobile from 'src/assets/img/logo-mobile-bp.png'
 import { SearchIconSvg } from '../icons/searchIconSVG'
 
+import cn from 'classnames'
+import { BurgerMenu } from 'src/widgets/main-navigation/components/burger-menu/burger-menu'
+
 export const Header = () => {
 	const breakpoint = useBreakPoint()
-	const [, setIsSmallScreen] = useState(false)
+	const [isSmallScreen, setIsSmallScreen] = useState(false)
 
 	useEffect(() => {
 		const handleResize = () => {
-			setIsSmallScreen(window.innerWidth <= 1340)
+			setIsSmallScreen(window.innerWidth <= 768)
 		}
 		handleResize()
 		window.addEventListener('resize', handleResize)
@@ -36,7 +39,7 @@ export const Header = () => {
 						</Link>
 					</FlexRow>
 					<FlexRow className={styles.controlsRow}>
-						<Link to={'/'} className={styles.enterLK}>
+						<Link to={'/'} className={cn(styles.enterLK, styles.search)}>
 							<div className={styles.vector}>
 								<SearchIconSvg />
 							</div>
@@ -46,6 +49,7 @@ export const Header = () => {
 								<PersonIconSvg />
 							</div>
 						</Link>
+						{isSmallScreen && <BurgerMenu />}
 					</FlexRow>
 				</FlexRow>
 			</Container>
