@@ -5,6 +5,8 @@ import styles from './index.module.scss'
 import cn from 'classnames'
 import { SlidePrevSvg } from 'src/shared/ui/icons/slidePrevSVG'
 import { SlideNextSvg } from 'src/shared/ui/icons/slideNextSVG'
+import { SlidePrevDefaultSVG } from 'src/shared/ui/icons/SlidePrevDefaultSVG'
+import { SlideNextDefaultSVG } from 'src/shared/ui/icons/SlideNextDefaultSVG'
 
 type SliderProps = {
 	swiperRef: RefObject<SwiperRef>
@@ -12,6 +14,7 @@ type SliderProps = {
 	prevBtnColor?: string
 	nextBtnColor?: string
 	color?: string
+	variant?: 'main' | 'years'
 }
 
 export const SliderBtns: FC<SliderProps> = ({
@@ -20,6 +23,7 @@ export const SliderBtns: FC<SliderProps> = ({
 	color,
 	prevBtnColor,
 	nextBtnColor,
+	variant = 'main',
 }) => {
 	const handlePrev = () => {
 		swiperRef.current?.swiper.slidePrev()
@@ -27,6 +31,18 @@ export const SliderBtns: FC<SliderProps> = ({
 
 	const handleNext = () => {
 		swiperRef.current?.swiper.slideNext()
+	}
+	if (variant === 'years') {
+		return (
+			<div className={cn(className, styles.sliderBtnsWrapper)}>
+				<button type='button' onClick={handlePrev} style={{ background: prevBtnColor }}>
+					<SlidePrevDefaultSVG />
+				</button>
+				<button type='button' onClick={handleNext} style={{ background: nextBtnColor }}>
+					<SlideNextDefaultSVG />
+				</button>
+			</div>
+		)
 	}
 	return (
 		<div className={cn(className, styles.sliderBtnsWrapper)}>

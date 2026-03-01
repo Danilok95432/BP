@@ -1,18 +1,18 @@
 export const navigationElements = [
 	{
 		title: 'Беляевский фонд',
-		link: '/',
+		link: '/fond',
 	},
 	{
 		title: 'Беляевская премия',
-		link: '/',
+		link: '/about',
 	},
 	{
 		title: 'Конкурс премии',
-		link: '/',
+		link: '/awards',
 	},
 	{
 		title: 'Александр Беляев',
-		link: '/',
+		link: '/belyaev',
 	},
 ]

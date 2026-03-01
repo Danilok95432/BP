@@ -16,10 +16,7 @@ import {
 } from 'src/features/auth/api/auth.api'
 import { useGetEventByIdQuery } from 'src/features/home/api/home.api'
 import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
-import { booleanToNumberString, formatDateRange, mainFormatDate } from 'src/shared/helpers/utils'
-import { LogoModalMobileSVG } from 'src/shared/ui/icons/logoModalMobileSVG'
-import { LogoModalSVG } from 'src/shared/ui/icons/logoModalSVG'
-import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
+import { booleanToNumberString } from 'src/shared/helpers/utils'
 import { MainButton } from 'src/shared/ui/MainButton/MainButton'
 import { useActions } from 'src/app/store/hooks/actions'
 import { useLocation } from 'react-router-dom'
@@ -159,19 +156,19 @@ export const BuyTicketModal: FC<RegEventPartModalProps> = ({ id }) => {
 		formData.append('use_trader', booleanToNumberString(data.use_trader))
 		formData.append(
 			'trader_name',
-			data.use_group ? data.trader_name_group ?? '' : data.trader_name ?? '',
+			data.use_group ? (data.trader_name_group ?? '') : (data.trader_name ?? ''),
 		)
 		formData.append('use_master', booleanToNumberString(data.use_master))
 		formData.append('use_org', booleanToNumberString(data.use_org))
 		formData.append('use_volunteer', booleanToNumberString(data.use_volunteer))
 		formData.append(
 			'master_name',
-			data.use_group ? data.master_name_group ?? '' : data.master_name ?? '',
+			data.use_group ? (data.master_name_group ?? '') : (data.master_name ?? ''),
 		)
 		formData.append('use_journalist', booleanToNumberString(data.use_journalist))
 		formData.append(
 			'journal_name',
-			data.use_group ? data.journal_name_group ?? '' : data.journal_name ?? '',
+			data.use_group ? (data.journal_name_group ?? '') : (data.journal_name ?? ''),
 		)
 
 		formData.append('sub_events_list', selectedObjSubEvents)
@@ -259,22 +256,8 @@ export const BuyTicketModal: FC<RegEventPartModalProps> = ({ id }) => {
 						>
 							<HeadSection />
 							<RegSection />
-							<FlexRow className={cn(styles.disclaimer, styles._last)}>
-								<div className={styles.grayBox}>
-									<p>
-										Внимание! Завершение регистрации означает согласие с{' '}
-										<a href={`https://этноспорт.рф/events/1/docs`}>
-											Политикой защиты и обработки персональных данных
-										</a>{' '}
-										и <a href={`https://этноспорт.рф/events/1/rules`}>Правилами посещения игр</a>.
-									</p>
-								</div>
-							</FlexRow>
-							<MainButton
-								type='submit'
-								disabled={!isCodeAccepted || useFlags.filter((el) => el).length === 0}
-							>
-								Перети к оплате билетов
+							<MainButton type='submit' className={styles.submitBtn}>
+								Подать заявку
 							</MainButton>
 						</form>
 					</FormProvider>

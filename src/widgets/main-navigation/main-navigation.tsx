@@ -24,7 +24,13 @@ export const MainNavigation = () => {
 
 				<ul className={styles.navWrapper}>
 					{navigationElements.map((el, index) => (
-						<button key={index} className={styles.navEl} onClick={() => navigate(el.link)}>
+						<button
+							key={index}
+							className={styles.navEl}
+							onClick={() => {
+								navigate(el.link)
+							}}
+						>
 							<li className={cn({ [styles.active]: location.pathname.includes(el.link) })}>
 								{el.title}
 							</li>

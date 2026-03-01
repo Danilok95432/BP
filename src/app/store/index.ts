@@ -1,16 +1,20 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { authApi } from 'src/features/auth/api/auth.api'
 import { contentApi } from 'src/features/content/api/content'
+import { uploadFilesApi } from 'src/features/files/api/files'
 import { homeApi } from 'src/features/home/api/home.api'
 import { modalReducer } from 'src/features/modal/store/modal.slice'
 import { NameSpace } from 'src/shared/helpers/consts'
+import { breadCrumbsReducer } from 'src/widgets/bread-crumbs/store/bread-crumbs.slice'
 
 export const store = configureStore({
 	reducer: {
 		[NameSpace.Modal]: modalReducer,
+		[NameSpace.BreadCrumbs]: breadCrumbsReducer,
 		[homeApi.reducerPath]: homeApi.reducer,
 		[authApi.reducerPath]: authApi.reducer,
 		[contentApi.reducerPath]: contentApi.reducer,
+		[uploadFilesApi.reducerPath]: uploadFilesApi.reducer,
 	},
 	devTools: true,
 	middleware: (getDefaultMiddleware) =>
@@ -18,6 +22,7 @@ export const store = configureStore({
 			homeApi.middleware,
 			authApi.middleware,
 			contentApi.middleware,
+			uploadFilesApi.middleware,
 		),
 })
 

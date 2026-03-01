@@ -26,11 +26,14 @@ export const MobileList = <T extends { id: string }>({
 	}
 
 	const visibleItems = isExpanded ? items : items?.slice(0, defaultVisibleCount)
+	console.log(visibleItems)
 
 	return (
 		<>
 			<div className={classListItems}>
-				{visibleItems?.map((item) => <RenderItem key={item.id} {...item} />)}
+				{visibleItems?.map((item) => (
+					<RenderItem key={item.id} {...item} />
+				))}
 			</div>
 			{items?.length > defaultVisibleCount && (
 				<MainButton

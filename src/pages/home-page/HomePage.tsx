@@ -1,6 +1,6 @@
 import { NewsSection } from 'src/shared/sections/NewsSection/news-section'
 import { VideosSection } from 'src/shared/sections/VideosSection/videos-section'
-import { EventsSection } from 'src/shared/sections-new/EventSection/event-section'
+// import { EventsSection } from 'src/shared/sections-new/EventSection/event-section'
 import { FaqSection } from 'src/shared/sections/FaqSection/faq-section'
 import { PartnersSection } from 'src/shared/sections/PartnersSection/partners-section'
 import { MainImgSection } from 'src/shared/sections-new/MainImgSection/mainImgSection'
@@ -13,7 +13,7 @@ export const HomePage = () => {
 			<MainImgSection />
 			<NewsSection id={'1'} />
 			<HistorySection />
-			<EventsSection />
+			{/* <EventsSection /> */}
 			<InfoMainSection />
 			<VideosSection id={'1'} />
 			<PartnersSection id={'1'} />

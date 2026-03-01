@@ -45,12 +45,42 @@
 			transition: all 0.3s ease-in-out;
 			padding: 7px 10px;
 			text-align: center;
+			position: relative;
 			.active {
 				color: var(--additional-theme-color);
+				&::before {
+					content: '';
+					position: absolute;
+					left: -8.5px;
+					top: 50%;
+					transform: translateY(-50%) rotate(45deg);
+					width: 8px;
+					height: 8px;
+					background: var(--additional-theme-color);
+					opacity: 1;
+					transition: all 0.3s ease-in-out;
+					pointer-events: none;
+				}
 			}
-			&:hover {
-				box-shadow: var(--box-shadow);
-				border-radius: 50px;
+			&::before {
+				content: '';
+				position: absolute;
+				left: -8.5px;
+				top: 50%;
+				transform: translateY(-50%) rotate(45deg);
+				width: 0;
+				height: 0;
+				background: var(--additional-theme-color);
+				opacity: 0;
+				transition: all 0.3s ease-in-out;
+				pointer-events: none;
+			}
+
+			&:hover::before {
+				width: 8px;
+				height: 8px;
+				opacity: 1;
+				left: -8.5px;
 			}
 		}
 	}
@@ -67,4 +97,3 @@
 		}
 	}
 }
-

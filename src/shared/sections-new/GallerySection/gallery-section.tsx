@@ -1,4 +1,4 @@
-import { type RefObject, useEffect, useRef, useState } from 'react'
+import { type FC, type RefObject, useEffect, useRef, useState } from 'react'
 import { useGetEventByIdQuery } from 'src/features/home/api/home.api'
 import { Container } from 'src/shared/ui/Container/Container'
 import { Section } from 'src/shared/ui/Section/section'
@@ -16,13 +16,13 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { eventsSliderFullScreenOptions, eventsSliderOptions } from './consts'
 
-export const GallerySection = () => {
+export const GallerySection: FC<{ classNameSection?: string }> = ({ classNameSection }) => {
 	const swiperRef: RefObject<SwiperRef> = useRef<SwiperRef>(null)
 	const fullscreenSwiperRef: RefObject<SwiperRef> = useRef<SwiperRef>(null)
 
 	const { data: eventData } = useGetEventByIdQuery('1')
 
-	const [activeIndex, setActiveIndex] = useState(0)
+	const [, setActiveIndex] = useState(0)
 	const [allPagePhoto, setAllPagePhoto] = useState<ImageItemWithText[]>([])
 
 	// fullscreen state
@@ -34,12 +34,9 @@ export const GallerySection = () => {
 	}
 
 	const getButtonColors = () => {
-		const isFirstSlide = activeIndex === 0
-		const isLastSlide = eventData?.promo ? activeIndex === eventData.promo.length - 2 : false
-
 		return {
-			prevBtnColor: isFirstSlide ? '#00000040' : '#000',
-			nextBtnColor: isLastSlide ? '#00000040' : '#000',
+			prevBtnColor: 'transparent',
+			nextBtnColor: 'transparent',
 		}
 	}
 
@@ -74,7 +71,7 @@ export const GallerySection = () => {
 	}, [isFullscreenOpen])
 
 	return (
-		<Section id='photo' className={styles.gallerySection}>
+		<Section id='photo' className={classNames(styles.gallerySection, classNameSection)}>
 			<Container className={styles.galleryCont}>
 				<Swiper
 					{...eventsSliderOptions}
@@ -104,8 +101,6 @@ export const GallerySection = () => {
 											/>
 										)}
 									</div>
-									<p className={styles.title}>{slideEl.title}</p>
-									<p className={styles.author}>{`Автор: ${slideEl.author}`}</p>
 								</FlexRow>
 							</SwiperSlide>
 						)
@@ -115,7 +110,7 @@ export const GallerySection = () => {
 				<SliderBtns
 					className={styles.sliderBtns}
 					swiperRef={swiperRef}
-					color={'#fff'}
+					color={'#000'}
 					prevBtnColor={prevBtnColor}
 					nextBtnColor={nextBtnColor}
 				/>
@@ -154,8 +149,8 @@ export const GallerySection = () => {
 							className={styles.fullscreenBtns}
 							swiperRef={fullscreenSwiperRef}
 							color={'#fff'}
-							prevBtnColor={'#000'}
-							nextBtnColor={'#000'}
+							prevBtnColor={prevBtnColor}
+							nextBtnColor={nextBtnColor}
 						/>
 
 						<button type='button' className={styles.fullscreenClose} onClick={closeFullscreen}>

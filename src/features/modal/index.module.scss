@@ -1,7 +1,10 @@
 .modal {
   height: 100vh;
   width: 100vw;
-  background-color: rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px) saturate(180%);
+  -webkit-backdrop-filter: blur(6px) saturate(180%);
+
   position: fixed;
   top: 0;
   left: 0;
@@ -16,12 +19,20 @@
     padding-top: 10px;
     padding-bottom: calc(20px + env(safe-area-inset-bottom));
   }
-
+  .modalWrapper {
+    position: relative;
+    .closeVector {
+      position: absolute;
+      top: -24px;
+      right: -24px;
+      cursor: pointer;
+    }
+  }
   .modalContent {
     transform: scale(0.5);
     transition: 0.4s;
-    border-radius: 10px;
-    max-height: 98vh;
+    border-radius: 24px;
+    max-height: 90vh;
     overflow-y: auto;
     overflow-x: hidden;
     -ms-overflow-style: none;
@@ -55,7 +66,7 @@
     }
 
     .modal-content {
-      background-color: #ffffff;
+      background-color: var(--main-theme-color);
       padding: 30px 30px;
       @media (max-width: 768px) {
         padding: 25px 15px;

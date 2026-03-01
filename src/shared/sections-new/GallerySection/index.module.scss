@@ -9,11 +9,9 @@ section.gallerySection {
 			padding: 0;
 		}
 		div.sliderBtns {
-			bottom: -30px;
-			top: unset;
-			width: 88px;
-			left: unset;
-			right: -45px;
+			top: 45%;
+			left: 49%;
+			width: calc(100% + 90px);
 			@media (max-width: 768px) {
 				display: none;
 			}

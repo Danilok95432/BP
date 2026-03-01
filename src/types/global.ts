@@ -28,6 +28,10 @@ export type MonthFilterItem = {
 	date: Date
 	isActive: boolean
 }
+export type YearFilterItem = {
+	year: string
+	isActive: boolean
+}
 export type CategoryFilterItem = {
 	id: string
 	title: string

@@ -7,6 +7,8 @@ import classNames from 'classnames'
 import { ErrorMessage } from '@hookform/error-message'
 import { useFormContext } from 'react-hook-form'
 import { type SelOption } from 'src/types/select'
+import { ReactDropzoneFiles } from 'src/widgets/reactDropzoneFiles/reactDropzoneFiles'
+import { AddButton } from 'src/shared/ui/AddButton/AddButton'
 
 type RegSectionProps = {
 	errorForm?: string
@@ -53,14 +55,7 @@ export const RegSection: FC<RegSectionProps> = ({
 
 	return (
 		<div className={classNames(styles.formSection, styles.formSectionReg)}>
-			<FlexRow className={styles.regHead}>
-				<span className={styles.titleSmall}>Регистрация гостя</span>
-				<FlexRow className={classNames(styles.disclaimer)}>
-					<div className={styles.grayBox}>
-						<p>Регистрация гостя обязательна, без нее мы не сможем продать Вам билеты.</p>
-					</div>
-				</FlexRow>
-			</FlexRow>
+			<span className={styles.sectionTitle}>Личные данные</span>
 			<FlexRow className={styles.groupInputs}>
 				<FormInput
 					name='surname'
@@ -84,8 +79,16 @@ export const RegSection: FC<RegSectionProps> = ({
 			</FlexRow>
 			<div className={styles.inputwithLabel}>
 				<FormInput
+					name='author'
+					label='Авторский псевдоним'
+					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
+				/>
+				<span>Укажите, чтобы вместо имени и фамилии на сайте отображался псевдоним.</span>
+			</div>
+			<div className={styles.inputwithLabel}>
+				<FormInput
 					name='id_region'
-					label='Регион РФ'
+					label='Откуда вы *'
 					className={styles.noMargin}
 					is_select
 					selectOptions={regions ?? [{ label: 'Не выбрано', value: '0' }]}
@@ -95,10 +98,6 @@ export const RegSection: FC<RegSectionProps> = ({
 						<ErrorMessage errors={errors} name={'id_region'} />
 					</p>
 				)}
-				<span>
-					Начните ввод названия региона и выберите из предложенных вариантов. Если Вы не из России,
-					наберите «ино» и выберите вариант «Иностранец».
-				</span>
 			</div>
 			<FlexRow className={styles.groupInputsStart}>
 				<div className={styles.inputwithLabel} ref={phoneInputRef}>
@@ -129,44 +128,6 @@ export const RegSection: FC<RegSectionProps> = ({
 					<span>Введите код для проверки</span>
 				</div>
 			</FlexRow>
-			<FlexRow className={styles.groupInputsStart}>
-				<div className={styles.inputwithLabel} ref={phoneInputRef}>
-					<FormInput
-						name='phone'
-						label='Номер телефона *'
-						isPhoneWithCode={true}
-						className={classNames(styles.noMargin, styles.first)}
-						isCodeAccepted={isCodeAccepted}
-					/>
-					{errorForm && <p className={styles.warningMessage}>{errorForm}</p>}
-					<span className={styles.phoneSpan}>На этот номер поступит СМС со ссылкой на билет</span>
-				</div>
-				<div className={styles.inputwithLabel} ref={codeInputRef}>
-					<FormInput
-						name='code'
-						label='Проверочный код *'
-						isCode
-						isCodeAccepted={isCodeAccepted}
-						errorForm={errorForm}
-						setErrorForm={setErrorForm}
-						setIsCodeAccepted={setIsCodeAccepted}
-						className={styles.noMargin}
-					/>
-					{!isCodeAccepted && errorForm && <p className={styles.warningMessage}>Неверный код</p>}
-					<span>Введите код для проверки</span>
-				</div>
-			</FlexRow>
-			<div className={styles.inputwithLabel} ref={phoneInputRef}>
-				<FormInput
-					name='email'
-					label='Адрес e-mail *'
-					className={classNames(styles.noMargin, styles.first)}
-				/>
-				{errorForm && <p className={styles.warningMessage}>{errorForm}</p>}
-				<span className={styles.phoneSpan}>
-					На этот адрес поступят письма с проверочным кодом и ссылкой на билет
-				</span>
-			</div>
 			<div className={styles.inputwithLabel} ref={phoneInputRef}>
 				<FormInput
 					name='phone'
@@ -176,14 +137,56 @@ export const RegSection: FC<RegSectionProps> = ({
 					isCodeAccepted={isCodeAccepted}
 				/>
 				{errorForm && <p className={styles.warningMessage}>{errorForm}</p>}
-				<span className={styles.phoneSpan}>
-					Этот номер будет использован только для контакта
-					<br /> с Вами
-				</span>
 			</div>
-			<p className={styles.desc}>
-				Электронный кассовый чек будет выслан Вам вместе с билетом на e-mail или телефон.
-			</p>
+			<span className={styles.sectionTitle}>Загрузка работы</span>
+			<div className={styles.inputwithLabel}>
+				<FormInput
+					name='nameWork'
+					label='Название работы *'
+					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
+				/>
+			</div>
+			<div className={styles.inputwithLabel}>
+				<FormInput
+					name='form'
+					label='Выбор формы *'
+					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
+					selectOptions={[{ label: '', value: '' }]}
+					is_select
+				/>
+			</div>
+			<div className={styles.inputwithLabel}>
+				<FormInput
+					name='genre'
+					label='Основной жанр'
+					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
+					selectOptions={[{ label: '', value: '' }]}
+					is_select
+				/>
+			</div>
+			<div className={styles.inputwithLabel}>
+				<FormInput
+					name='short_annotation'
+					label='Краткая аннотация *'
+					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
+					isTextArea
+					height='201px'
+				/>
+			</div>
+			<div className={styles.inputwithLabel}>
+				<FormInput
+					name='link'
+					label='Ссылка на электронную публикацию'
+					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
+				/>
+			</div>
+			<ReactDropzoneFiles
+				className={styles.filesDrop}
+				name='files'
+				variant='text'
+				multiple
+				customUploadBtn={<AddButton>Загрузить работу</AddButton>}
+			/>
 		</div>
 	)
 }

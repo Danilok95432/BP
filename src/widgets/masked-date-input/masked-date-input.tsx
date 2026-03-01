@@ -1,4 +1,4 @@
-import React, { type FC } from 'react'
+import React, { useState, type FC } from 'react'
 import { useFormContext, useController, type FieldError } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 import { IMaskInput } from 'react-imask'
@@ -28,6 +28,7 @@ export const MaskedDateInput: FC<MaskedDateInputProps> = ({
 		control,
 		formState: { errors },
 	} = useFormContext()
+	const [isFocused, setIsFocused] = useState<boolean>(false)
 
 	const {
 		field: { ref, value, onChange, ...inputProps },
@@ -39,7 +40,10 @@ export const MaskedDateInput: FC<MaskedDateInputProps> = ({
 	const currentYear = new Date().getFullYear()
 
 	return (
-		<div className={cn(styles.dateInputWrapper, className)} style={{ margin }}>
+		<div
+			className={cn(styles.dateInputWrapper, className, { [styles.focused]: isFocused })}
+			style={{ margin }}
+		>
 			<label>
 				{label && <p>{label}</p>}
 				<IMaskInput
@@ -72,6 +76,10 @@ export const MaskedDateInput: FC<MaskedDateInputProps> = ({
 					onAccept={(val) => {
 						onChange(val)
 					}}
+					onFocus={() => {
+						setIsFocused(true)
+					}}
+					onBlur={() => setIsFocused(false)}
 				/>
 			</label>
 

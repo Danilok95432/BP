@@ -93,8 +93,10 @@
 				background: var(--main-allBtn-color);
 				color: #000;
 				height: max-content;
+				transition: all .3s ease-in-out;
 				&:hover {
-					box-shadow: var(--box-shadow);
+					background: #0000001A;
+					color: #000;
 				}
 				@media (max-width: 768px) {
 					color: #000;

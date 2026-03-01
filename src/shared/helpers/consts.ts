@@ -13,11 +13,13 @@ export enum ReducerPath {
 	Vids = 'vids/api',
 	Heroes = 'heroes/api',
 	Cicles = 'cicles/api',
+	UploadFiles = 'uploadFiles/api',
 }
 
 export const ImagesFormat = ['png', 'jpeg', 'jpg', 'webp', 'gif']
 export enum NameSpace {
 	Modal = 'MODAL',
+	BreadCrumbs = 'BREAD_CRUMBS',
 }
 
 export enum DisplayBreakpoints {
@@ -35,4 +37,4 @@ export enum DisplayBreakpoints {
 
 export const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4020/api/v1' // express js сервер
 export const PROD_URL = '/api' // для локальной разработки
-export const MAIN_PROD_URL = 'https://t6simpleapi.npotau.ru' // для выкладки на vercel
+export const MAIN_PROD_URL = 'https://pabapi.npotau.ru' // для выкладки на vercel

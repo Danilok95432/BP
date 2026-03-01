@@ -62,6 +62,64 @@ const monthNames = [
 	'Декабрь',
 ]
 
+interface TimeLeft {
+	days: number
+	hours: number
+	minutes: number
+	total: number // общее количество миллисекунд
+}
+
+export function getTimeLeft(targetDate: string): TimeLeft {
+	const target = new Date(targetDate).getTime()
+	const now = new Date().getTime()
+	const difference = target - now
+
+	// Если дата уже прошла
+	if (difference <= 0) {
+		return {
+			days: 0,
+			hours: 0,
+			minutes: 0,
+			total: 0,
+		}
+	}
+
+	// Расчет дней, часов, минут
+	const days = Math.floor(difference / (1000 * 60 * 60 * 24))
+	const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+	const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))
+
+	return {
+		days,
+		hours,
+		minutes,
+		total: difference,
+	}
+}
+
+// Функция для форматированного вывода
+export function formatTimeLeft(targetDate: string): string {
+	const { days, hours, minutes } = getTimeLeft(targetDate)
+
+	if (days === 0 && hours === 0 && minutes === 0) {
+		return 'Время истекло'
+	}
+
+	const parts = []
+	if (days > 0) parts.push(`${days} ${pluralize(days, ['день', 'дня', 'дней'])}`)
+	if (hours > 0) parts.push(`${hours} ${pluralize(hours, ['час', 'часа', 'часов'])}`)
+	if (minutes > 0) parts.push(`${minutes} ${pluralize(minutes, ['минута', 'минуты', 'минут'])}`)
+
+	return parts.join(', ')
+}
+
+// Вспомогательная функция для склонения слов
+function pluralize(count: number, forms: [string, string, string]): string {
+	const cases = [2, 0, 1, 1, 1, 2]
+	const index = count % 100 > 4 && count % 100 < 20 ? 2 : cases[Math.min(count % 10, 5)]
+	return forms[index]
+}
+
 export const mainFormatMonthDate = (
 	date: Date | string | undefined,
 	dateFormat = 'dd MMMM yyyy',

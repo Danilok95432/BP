@@ -1,8 +1,13 @@
 div.ticketModal {
-	width: 730px;
-
+	width: 764px;
+	position: relative;
 	@media (max-width: 840px) {
 		width: 85vw;
+	}
+	.closeVector {
+		position: absolute;
+		top: -20px;
+		right: 0;
 	}
 }
 
@@ -20,6 +25,22 @@ div.ticketModal {
 		text-align: center;
 		@media (max-width: 768px) {
 			font-size: 20px;
+		}
+	}
+	.submitBtn {
+		background: #5365fe;
+		transition: all 0.3s ease-in-out;
+		margin-top: 40px;
+		&:hover {
+			background: #091e9d;
+		}
+	}
+	.filesDrop {
+		span {
+			font-size: 20px;
+			font-weight: 500;
+			color: #fff;
+			border-bottom: none;
 		}
 	}
 	.ticketForm {
@@ -43,8 +64,7 @@ div.ticketModal {
 		.formSection {
 			display: flex;
 			flex-direction: column;
-			gap: 16px;
-			margin-bottom: 32px;
+			gap: 0px;
 			@media (max-width: 768px) {
 				gap: 15px;
 				padding-top: 25px;
@@ -52,10 +72,20 @@ div.ticketModal {
 			.title {
 				font-size: 32px;
 				font-weight: 500;
-				padding-bottom: 10px;
+				padding-bottom: 4px;
+				color: #fff;
 			}
 			.titleSmall {
+				font-size: 32px;
+				color: #fff;
+				font-weight: 500;
+				padding-bottom: 24px;
+			}
+			.sectionTitle {
 				font-size: 24px;
+				color: #fff;
+				font-weight: 500;
+				margin-top: 16px;
 			}
 			.desc {
 				font-size: 16px;
@@ -66,9 +96,9 @@ div.ticketModal {
 				align-items: center;
 				flex-wrap: nowrap;
 				gap: 16px;
-        @media (max-width: 768px) {
-          flex-wrap: wrap;
-        }
+				@media (max-width: 768px) {
+					flex-wrap: wrap;
+				}
 				.selectForm {
 					width: 100%;
 					max-width: 468px;
@@ -80,9 +110,9 @@ div.ticketModal {
 				.first {
 					min-width: 468px;
 					width: 100%;
-          @media (max-width: 850px) {
-            min-width: unset;
-          }
+					@media (max-width: 850px) {
+						min-width: unset;
+					}
 				}
 				.noMargin {
 					margin: 0;
@@ -169,10 +199,10 @@ div.ticketModal {
 				align-items: start;
 				flex-wrap: nowrap;
 				gap: 16px;
-        @media (max-width: 768px) {
-          flex-direction: column;
-          gap: 46px;
-        }
+				@media (max-width: 768px) {
+					flex-direction: column;
+					gap: 46px;
+				}
 				.selectForm {
 					width: 100%;
 					max-width: 468px;
@@ -184,9 +214,9 @@ div.ticketModal {
 				.first {
 					width: 100%;
 					min-width: 468px;
-          @media (max-width: 850px) {
-            min-width: unset;
-          }
+					@media (max-width: 850px) {
+						min-width: unset;
+					}
 				}
 			}
 			.billTotal {
@@ -226,7 +256,7 @@ div.ticketModal {
 					font-size: 14px;
 				}
 				span {
-					color: #707070;
+					color: #ffffff80;
 					font-size: 14px;
 				}
 			}
@@ -243,7 +273,7 @@ div.ticketModal {
 
 	.disclaimer {
 		gap: 10px;
-    width: 100%;
+		width: 100%;
 		.title {
 			font-size: 26px;
 			font-weight: 500;
@@ -252,7 +282,7 @@ div.ticketModal {
 			}
 		}
 		.grayBox {
-      width: 100%;
+			width: 100%;
 			background: #cae5f07a;
 			padding: 10px;
 			font-size: 16px;

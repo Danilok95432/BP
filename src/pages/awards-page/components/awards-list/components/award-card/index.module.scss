@@ -1,0 +1,56 @@
+.awardCard {
+  max-height: 419px;
+  position: relative;
+  height: 419px;
+  width: 100%;
+  background: #00000010;
+  cursor: pointer;
+  border-radius: 16px;
+  &:hover .title{
+    color: #fff;
+    text-decoration: underline 1px;
+  }
+  &:hover .infoWrapper p {
+    color: #fff;
+  }
+  &:hover .bg {
+    display: flex;
+  }
+  .bg {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    border-radius: 16px;
+    transition: all .3s ease-in-out;
+  }
+  .card {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 32px;
+    position: relative;
+    z-index: 2;
+    .title {
+      font-size: 36px;
+      font-weight: 300;
+      text-align: left;
+    }
+    .infoWrapper {
+      gap: 8px;
+      flex-direction: column;
+      .topBlock {
+        gap: 8px;
+        align-items: center;
+      }
+      p {
+        font-size: 16px;
+      }
+    }
+  }
+}

@@ -1,13 +1,16 @@
 import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react'
 import { Section } from 'src/shared/ui/Section/section'
-import { type RefObject, useRef } from 'react'
+import { type FC, type RefObject, useRef } from 'react'
 import { Container } from '../../ui/Container/Container'
 import styles from './index.module.scss'
 import cn from 'classnames'
 import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
 import { eventsSliderOptions } from './consts'
 
-export const HistorySection = () => {
+export const HistorySection: FC<{ noTitle?: boolean; className?: string }> = ({
+	noTitle = false,
+	className,
+}) => {
 	const history = [
 		{
 			id: '1',
@@ -60,11 +63,13 @@ export const HistorySection = () => {
 	]
 	const swiperRef: RefObject<SwiperRef> = useRef<SwiperRef>(null)
 	return (
-		<Section className={cn(styles.history)}>
+		<Section className={cn(styles.history, className)}>
 			<Container>
-				<FlexRow className={styles.eventsSectionRow}>
-					<h2 className={styles.sectionTitle}>История</h2>
-				</FlexRow>
+				{!noTitle && (
+					<FlexRow className={styles.eventsSectionRow}>
+						<h2 className={styles.sectionTitle}>История</h2>
+					</FlexRow>
+				)}
 				<FlexRow className={styles.historyList}>
 					<Swiper {...eventsSliderOptions} ref={swiperRef}>
 						{history?.map((el) => {

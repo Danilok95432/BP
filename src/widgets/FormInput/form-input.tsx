@@ -1,5 +1,12 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import React, { useState, useRef, type InputHTMLAttributes, useEffect } from 'react'
+import React, {
+	useState,
+	useRef,
+	type InputHTMLAttributes,
+	type TextareaHTMLAttributes,
+	useEffect,
+} from 'react'
 import InputMask from 'react-input-mask'
 import cn from 'classnames'
 import styles from './index.module.scss'
@@ -26,6 +33,8 @@ interface CustomProps {
 	is_select?: boolean
 	is_city_select?: boolean
 	isCode?: boolean
+	isTextArea?: boolean // Новый флаг для textarea
+	heightTextArea?: string // Высота для textarea
 	selectOptions?: SelOption[]
 	errorForm?: string
 	searchValue?: string
@@ -43,7 +52,9 @@ interface CustomProps {
 	setTicketUrl?: (arg0: string) => void
 }
 
-type TextInputProps = InputHTMLAttributes<HTMLInputElement> & CustomProps
+type TextInputProps = InputHTMLAttributes<HTMLInputElement> &
+	TextareaHTMLAttributes<HTMLTextAreaElement> &
+	CustomProps
 
 export const FormInput: React.FC<TextInputProps> = ({
 	label,
@@ -64,10 +75,10 @@ export const FormInput: React.FC<TextInputProps> = ({
 	onFocus,
 	maskChar = '_',
 	name,
-	// eslint-disable-next-line @typescript-eslint/naming-convention
 	is_select,
-	// eslint-disable-next-line @typescript-eslint/naming-convention
 	is_city_select,
+	isTextArea = false, // Новый пропс с дефолтным значением
+	heightTextArea = '120px', // Дефолтная высота для textarea
 	lockSearch,
 	setLockSearch,
 	selectOptions,
@@ -81,6 +92,7 @@ export const FormInput: React.FC<TextInputProps> = ({
 }) => {
 	const { register, control, watch } = useFormContext()
 	const inputRef = useRef<HTMLInputElement>(null)
+	const textareaRef = useRef<HTMLTextAreaElement>(null)
 	const [isFocused, setIsFocused] = useState(false)
 	const [isSended, setIsSended] = useState(false)
 	const [showOptions, setShowOptions] = useState(false)
@@ -164,7 +176,6 @@ export const FormInput: React.FC<TextInputProps> = ({
 						const filteredOptions = forceShowAllOptions
 							? selectOptions
 							: selectOptions?.filter((opt) =>
-									// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 									opt.label.toLowerCase().includes((field.value || '').toLowerCase()),
 								)
 
@@ -370,6 +381,7 @@ export const FormInput: React.FC<TextInputProps> = ({
 					[styles.error]: !!error,
 					[styles.disabled]: disabled,
 					[styles.accept]: accept,
+					[styles.textarea]: isTextArea, // Добавляем класс для textarea
 				})}
 			>
 				{isPhone || isPhoneWithCode ? (
@@ -419,6 +431,21 @@ export const FormInput: React.FC<TextInputProps> = ({
 							</>
 						)}
 					/>
+				) : isTextArea ? (
+					// Рендерим textarea если флаг isTextArea активен
+					<textarea
+						{...register(name)}
+						className={styles.input}
+						disabled={disabled}
+						style={{ height: heightTextArea }} // Применяем высоту из пропса
+						ref={(e) => {
+							register(name).ref(e)
+							;(textareaRef as React.MutableRefObject<HTMLTextAreaElement | null>).current = e
+						}}
+						onFocus={handleFocus}
+						onBlur={handleBlur}
+						{...(restProps as TextareaHTMLAttributes<HTMLTextAreaElement>)}
+					/>
 				) : (
 					<input
 						{...register(name)}
@@ -430,6 +457,7 @@ export const FormInput: React.FC<TextInputProps> = ({
 						}}
 						onFocus={handleFocus}
 						onBlur={handleBlur}
+						{...(restProps as InputHTMLAttributes<HTMLInputElement>)}
 					/>
 				)}
 				<label

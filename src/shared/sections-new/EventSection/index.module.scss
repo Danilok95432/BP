@@ -41,7 +41,7 @@
 		color: #000;
 		height: max-content;
 		&:hover {
-			box-shadow: var(--box-shadow);
+			background: #0000001A;
 		}
 		@media (max-width: 768px) {
 			color: #000;
