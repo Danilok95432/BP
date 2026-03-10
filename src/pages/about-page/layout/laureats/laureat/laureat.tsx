@@ -45,7 +45,10 @@ export const LaureatDetails = () => {
 			<GallerySection classNameSection={styles.gallery} />
 			<GalleryImg className={laureatStyles.galleryPhotos} />
 			{laureatInfo.bottomDesc && (
-				<div dangerouslySetInnerHTML={{ __html: laureatInfo.bottomDesc }} />
+				<div
+					dangerouslySetInnerHTML={{ __html: laureatInfo.bottomDesc }}
+					className={styles.bottomDesc}
+				/>
 			)}
 		</div>
 	)

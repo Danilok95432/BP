@@ -2,7 +2,7 @@
 	margin-bottom: 64px;
 	h2 {
 		font-size: 24px;
-    font-weight: 700;
+		font-weight: 700;
 	}
 	.gallery {
 		padding: 32px 0;
@@ -11,6 +11,12 @@
 	.inner {
 		display: flex;
 		flex-direction: column;
+	}
+
+	.mainDescs {
+		@media (max-width: 768px) {
+			padding-right: 24px;
+		}
 	}
 
 	.blockquoteBody {

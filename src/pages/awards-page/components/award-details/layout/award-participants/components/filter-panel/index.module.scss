@@ -4,6 +4,9 @@
 	align-items: center;
 	justify-content: space-between;
 	padding-bottom: 15px;
+	@media (max-width: 768px) {
+		justify-content: start;
+	}
 	.hiddenMobile {
 		@media (max-width: 1080px) {
 			display: none;
@@ -22,10 +25,17 @@
 			width: 100%;
 			justify-content: space-between;
 		}
+		@media (max-width: 768px) {
+			gap: 16px;
+			grid-template-columns: minmax(247px, 296px) minmax(38px, 38px);
+		}
 		.searchWrapper {
 			@media (max-width: 1350px) {
 				min-width: 247px;
 				width: 100%;
+			}
+			@media (max-width: 768px) {
+				max-width: 296px;
 			}
 			.searchInput {
 				border: 1px solid #c5c5c5;

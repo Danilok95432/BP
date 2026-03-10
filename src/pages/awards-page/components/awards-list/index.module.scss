@@ -1,8 +1,17 @@
 .awardsList {
+	.awardsCont {
+		@media (max-width: 768px) {
+			padding-top: 0;
+		}
+	}
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 24px;
 		margin-bottom: 64px;
+		@media (max-width: 768px) {
+			grid-template-columns: repeat(1, 1fr);
+			padding: 0 10px;
+		}
 	}
 }

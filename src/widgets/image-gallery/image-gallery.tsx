@@ -27,7 +27,7 @@ type ImageGalleryProps = {
 	variant?: 'list' | 'slider' | 'newsMain' | 'newsDetailsSlider'
 }
 
-export const GalleryImg: FC<ImageGalleryProps> = ({
+export const GalleryImage: FC<ImageGalleryProps> = ({
 	className,
 	listClassName,
 	images,

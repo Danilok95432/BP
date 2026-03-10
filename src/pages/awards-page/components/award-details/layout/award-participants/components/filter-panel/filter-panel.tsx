@@ -38,9 +38,11 @@ export const FilterPanel: FC<FilterPanelProps> = ({ options }) => {
 						required
 					/>
 				</div>
-				<div className={styles.searchWrapper}>
+				<div className={cn(styles.searchWrapper, styles.hiddenMobile)}>
 					<MainInput
-						className={cn(styles.searchInput, { [styles._activeSearch]: options.workTitle })}
+						className={cn(styles.searchInput, {
+							[styles._activeSearch]: options.workTitle,
+						})}
 						name='searchWorkTitle'
 						placeholder='название произведения...'
 						value={options.workTitle}

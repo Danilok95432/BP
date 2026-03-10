@@ -1,7 +1,7 @@
 .aboutGeneralPage {
 	h2 {
 		font-size: 24px;
-    font-weight: 400;
+		font-weight: 700;
 	}
 	.gallery {
 		padding: 32px 0;
@@ -15,6 +15,9 @@
 	.blockquoteBody {
 		.mainDescs {
 			margin: 0 0 15px 0;
+			@media (max-width: 768px) {
+				padding-right: 24px;
+			}
 		}
 		span {
 			font-size: 15px;
@@ -71,10 +74,20 @@
 		padding: 41px 0;
 	}
 
+	.mainDescs {
+		@media (max-width: 768px) {
+			padding-right: 24px;
+		}
+	}
+
 	.contactsRow {
 		flex-direction: column;
 		gap: 16px;
-    margin-bottom: 64px;
+		margin-bottom: 64px;
+		margin-top: 56px;
+		@media (max-width: 768px) {
+			padding-right: 24px;
+		}
 		h3 {
 			font-size: 32px;
 			font-weight: 300;

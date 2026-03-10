@@ -30,7 +30,7 @@ export const Header = () => {
 
 	return (
 		<header className={styles.header}>
-			<Container>
+			<Container className={styles.cont}>
 				<FlexRow className={styles.headerRow}>
 					<FlexRow className={styles.logoRow}>
 						<Link to={'/'} aria-label='Главная' title='Главная' className={styles.logoWrap}>

@@ -21,6 +21,14 @@ import { AwardRules } from 'src/pages/awards-page/components/award-details/layou
 import { AwardParticipants } from 'src/pages/awards-page/components/award-details/layout/award-participants/award-participants'
 import { AwardExperts } from 'src/pages/awards-page/components/award-details/layout/award-experts/award-experts'
 import { AwardDocs } from 'src/pages/awards-page/components/award-details/layout/award-docs/award-docs'
+import { FondLayout } from 'src/pages/fond-page/fond-layout'
+import { AboutInfo } from 'src/pages/fond-page/layout/info/info'
+import { AboutProjectsLayout } from 'src/pages/fond-page/layout/projects/projects-layout'
+import { AboutProjects } from 'src/pages/fond-page/layout/projects/projects-list/projects'
+import { ProjectDetails } from 'src/pages/fond-page/layout/projects/project/project'
+import { FondDocs } from 'src/pages/fond-page/layout/docs/docs'
+import { BelyaevPage } from 'src/pages/belyaev-page/belyaev-page'
+import { Belyaev } from 'src/pages/belyaev-page/components/belyaev'
 
 export const MainRoutes = () => {
 	return (
@@ -37,6 +45,14 @@ export const MainRoutes = () => {
 				<Route path={'/content/videos/:id'} element={<VideoDetails />} />
 				<Route path={'/partners-list'} element={<PartnersPage />} />
 				<Route path={'/events-list'} element={<EventsPage />} />
+				<Route path={AppRoute.Fond} element={<FondLayout />}>
+					<Route index element={<AboutInfo />} />
+					<Route path={AppRoute.AboutProjects} element={<AboutProjectsLayout />}>
+						<Route index element={<AboutProjects />} />
+						<Route path=':id' element={<ProjectDetails />} />
+					</Route>
+					<Route path={AppRoute.AboutDocs} element={<FondDocs />} />
+				</Route>
 				<Route path={AppRoute.About} element={<AboutLayout />}>
 					<Route index element={<AboutHistory />} />
 					<Route path={AppRoute.AboutLaureats} element={<AboutLaureatsLayout />}>
@@ -53,6 +69,9 @@ export const MainRoutes = () => {
 						<Route path={`docs`} element={<AwardDocs />} />
 						<Route path={`experts`} element={<AwardExperts />} />
 					</Route>
+				</Route>
+				<Route path={AppRoute.Belyaev} element={<BelyaevPage />}>
+					<Route index element={<Belyaev />} />
 				</Route>
 			</Route>
 		</Routes>

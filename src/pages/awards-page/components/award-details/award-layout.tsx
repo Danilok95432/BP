@@ -6,6 +6,8 @@ import { Container } from 'src/shared/ui/Container/Container'
 import { HeadMenu } from 'src/widgets/head-menu/head-menu'
 import { AwardMenuItems } from './consts'
 import { AwardHeader } from './components/award-header/award-header'
+import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
+import classNames from 'classnames'
 
 export const AwardLayout: FC = () => {
 	const location = useLocation()
@@ -21,24 +23,23 @@ export const AwardLayout: FC = () => {
 	}
 
 	const isTraditionPage = getCurrentLocation()
+	const breakPoint = useBreakPoint()
 	return (
 		<div className={styles.aboutLayout}>
-			<Container className={styles.aboutContainerLayout}>
-				{!isTraditionPage && (
-					<>
-						{<AwardHeader />}
-						<HeadMenu
-							className={styles.aboutSideMenu}
-							sideItems={[
-								{
-									title: 'Подробно о номинации',
-									link: '',
-								},
-								...AwardMenuItems,
-							]}
-						/>
-					</>
-				)}
+			<Container className={classNames(styles.aboutContainerLayout, styles.noBottom)}>
+				{!isTraditionPage && <>{<AwardHeader />}</>}
+			</Container>
+			<Container className={styles.aboutContainerLayout} off={breakPoint === 'S'}>
+				<HeadMenu
+					className={styles.aboutSideMenu}
+					sideItems={[
+						{
+							title: 'Подробно о номинации',
+							link: '',
+						},
+						...AwardMenuItems,
+					]}
+				/>
 				<Outlet />
 			</Container>
 		</div>

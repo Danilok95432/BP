@@ -6,6 +6,7 @@ import { YearsFilterSlider } from 'src/widgets/years-filter-slider/years-filter-
 import laureatSkeletonCard from 'src/assets/img/card-laureat-skeleton.png'
 import { Link } from 'react-router-dom'
 import { laureats } from '../consts'
+import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
 
 export const AboutLaureats: FC = () => {
 	const yearsList = [
@@ -25,6 +26,7 @@ export const AboutLaureats: FC = () => {
 		{ year: '2013', isActive: true },
 	]
 
+	const breakPoint = useBreakPoint()
 	const [activeYear, setActiveYear] = useState('2025')
 
 	const handleChangeActiveYear = (newYear: string) => {
@@ -34,11 +36,17 @@ export const AboutLaureats: FC = () => {
 	// Фильтруем лауреатов по году, совпадающему с activeYear
 	const filteredLaureats = useMemo(() => {
 		return laureats.filter((laureat) => {
-			// Извлекаем год из ISO строки
 			const laureatYear = laureat.nominateDate.split('-')[0]
 			return laureatYear === activeYear
 		})
 	}, [laureats, activeYear])
+
+	// Преобразуем yearsList в формат для Select
+	const yearOptions = yearsList.map((item) => ({
+		value: item.year,
+		label: item.year,
+		disabled: !item.isActive,
+	}))
 
 	return (
 		<div className={styles.aboutGeneralPage}>
@@ -48,11 +56,29 @@ export const AboutLaureats: FC = () => {
 
 			<div className={styles.inner}>
 				<h2>Именитые лауреаты</h2>
-				<YearsFilterSlider
-					yearsList={yearsList ?? []}
-					changeActiveYear={handleChangeActiveYear}
-					activeYear={activeYear}
-				/>
+
+				{/* Условный рендеринг фильтра */}
+				{breakPoint === 'S' ? (
+					<div className={styles.yearSelectWrapper}>
+						<select
+							value={activeYear}
+							onChange={(e) => handleChangeActiveYear(e.target.value)}
+							className={styles.yearSelect}
+						>
+							{yearOptions.map((option) => (
+								<option key={option.value} value={option.value} disabled={option.disabled}>
+									{option.label}
+								</option>
+							))}
+						</select>
+					</div>
+				) : (
+					<YearsFilterSlider
+						yearsList={yearsList ?? []}
+						changeActiveYear={handleChangeActiveYear}
+						activeYear={activeYear}
+					/>
+				)}
 
 				{/* Список карточек лауреатов */}
 				<div className={styles.laureatsGrid}>

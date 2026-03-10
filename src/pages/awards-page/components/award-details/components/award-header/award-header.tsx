@@ -7,6 +7,7 @@ import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
 import { formatTimeLeft } from 'src/shared/helpers/utils'
 import { useActions } from 'src/app/store/hooks/actions'
 import { BuyTicketModal } from 'src/modals/buy-ticket-modal/buy-ticket-modal'
+import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
 
 export const AwardHeader: FC = () => {
 	// const location = useLocation()
@@ -79,7 +80,7 @@ export const AwardHeader: FC = () => {
 		opened: true,
 		dateList: '2026-03-02T23:59:59.999Z',
 	}
-
+	const breakPoint = useBreakPoint()
 	return (
 		<div className={styles.awardLayoutHeaderPageContent}>
 			<div className={styles.leftSideHeader}>
@@ -105,6 +106,7 @@ export const AwardHeader: FC = () => {
 						</MainButton>
 						<p>
 							{`До окончания приема заявок `}
+							{breakPoint === 'S' && <br />}
 							<span>{formatTimeLeft(nominationData.dateList)}</span>
 						</p>
 					</FlexRow>

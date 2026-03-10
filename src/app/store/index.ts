@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { aboutApi } from 'src/features/about/api/about'
 import { authApi } from 'src/features/auth/api/auth.api'
 import { contentApi } from 'src/features/content/api/content'
 import { uploadFilesApi } from 'src/features/files/api/files'
@@ -13,6 +14,7 @@ export const store = configureStore({
 		[NameSpace.BreadCrumbs]: breadCrumbsReducer,
 		[homeApi.reducerPath]: homeApi.reducer,
 		[authApi.reducerPath]: authApi.reducer,
+		[aboutApi.reducerPath]: aboutApi.reducer,
 		[contentApi.reducerPath]: contentApi.reducer,
 		[uploadFilesApi.reducerPath]: uploadFilesApi.reducer,
 	},
@@ -21,6 +23,7 @@ export const store = configureStore({
 		getDefaultMiddleware({ serializableCheck: false }).concat(
 			homeApi.middleware,
 			authApi.middleware,
+			aboutApi.middleware,
 			contentApi.middleware,
 			uploadFilesApi.middleware,
 		),

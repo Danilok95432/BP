@@ -18,6 +18,14 @@ div.aboutContentWrapper {
 	}
 }
 
+.aboutLayout {
+	.aboutCont {
+		@media (max-width: 768px) {
+			padding: 0 24px;
+		}
+	}
+}
+
 .aboutSideMenu {
 	margin-bottom: 20px;
 	@include mobile {

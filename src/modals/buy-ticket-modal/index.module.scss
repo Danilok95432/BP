@@ -41,6 +41,9 @@ div.ticketModal {
 			font-weight: 500;
 			color: #fff;
 			border-bottom: none;
+			@media (max-width: 768px) {
+				font-size: 16px;
+			}
 		}
 	}
 	.ticketForm {
@@ -65,27 +68,34 @@ div.ticketModal {
 			display: flex;
 			flex-direction: column;
 			gap: 0px;
-			@media (max-width: 768px) {
-				gap: 15px;
-				padding-top: 25px;
-			}
 			.title {
 				font-size: 32px;
 				font-weight: 500;
 				padding-bottom: 4px;
 				color: #fff;
+				@media (max-width: 768px) {
+					font-size: 24px;
+					padding-bottom: 16px;
+				}
 			}
 			.titleSmall {
 				font-size: 32px;
 				color: #fff;
 				font-weight: 500;
 				padding-bottom: 24px;
+				@media (max-width: 768px) {
+					font-size: 20px;
+				}
 			}
 			.sectionTitle {
 				font-size: 24px;
 				color: #fff;
 				font-weight: 500;
 				margin-top: 16px;
+				@media (max-width: 768px) {
+					font-size: 20px;
+					margin-top: 8px;
+				}
 			}
 			.desc {
 				font-size: 16px;
@@ -122,6 +132,7 @@ div.ticketModal {
 					min-height: 50px;
 					@media (max-width: 768px) {
 						margin-bottom: 0;
+						max-width: 170px;
 					}
 					label {
 						display: block;
@@ -263,6 +274,9 @@ div.ticketModal {
 		}
 		.formSectionReg {
 			gap: 24px;
+			@media (max-width: 768px) {
+				gap: 20px;
+			}
 			.regHead {
 				display: flex;
 				flex-direction: column;

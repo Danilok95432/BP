@@ -43,7 +43,7 @@ export const AwardsList = () => {
 	]
 	return (
 		<Section className={styles.awardsList}>
-			<Container>
+			<Container className={styles.awardsCont}>
 				<div className={styles.grid}>
 					{awards.map((award) => (
 						<AwardCard key={award.id} award={award} />

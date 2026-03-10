@@ -6,6 +6,10 @@ div.awardsLayoutHeaderPageContent {
   margin-bottom: 30px;
   border-bottom: 5px solid #F2F5F8;
   font-size: 20px;
+  @media (max-width: 768px) {
+    padding-bottom: 32px;
+    margin-bottom: 0px;
+  }
   .leftSideHeader {
     display: flex;
     flex-direction: column;

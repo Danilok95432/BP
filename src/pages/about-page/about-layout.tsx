@@ -1,18 +1,17 @@
 import { type FC } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import cn from 'classnames'
 
 import styles from './index.module.scss'
-import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
 import { Container } from 'src/shared/ui/Container/Container'
 import { BreadCrumbs } from 'src/widgets/bread-crumbs/bread-crumbs'
 import { AboutMenuItems } from './consts'
 import { AboutLayoutHeader } from './components/about-layout-header'
 import { HeadMenu } from 'src/widgets/head-menu/head-menu'
+import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
 
 export const AboutLayout: FC = () => {
 	const location = useLocation()
-	const breakpoint = useBreakPoint()
+	const breakPoint = useBreakPoint()
 
 	const getCurrentLocation = () => {
 		if (
@@ -39,10 +38,10 @@ export const AboutLayout: FC = () => {
 					]}
 				/>
 			</Container>
-			<Container className={styles.aboutContainerLayout}>
+			<Container className={styles.aboutContainerLayout} off={breakPoint === 'S'}>
 				{!isTraditionPage && (
 					<>
-						{breakpoint !== 'S' && <AboutLayoutHeader />}
+						{<AboutLayoutHeader />}
 						<HeadMenu
 							className={styles.aboutSideMenu}
 							sideItems={[
@@ -56,21 +55,6 @@ export const AboutLayout: FC = () => {
 					</>
 				)}
 				<Outlet />
-				{!isTraditionPage && breakpoint === 'S' && (
-					<>
-						<HeadMenu
-							className={cn(styles.bottomMobileMenu, styles.aboutSideMenu)}
-							position='bottom'
-							sideItems={[
-								{
-									title: 'Беляевская премия',
-									link: '/about',
-								},
-								...AboutMenuItems,
-							]}
-						/>
-					</>
-				)}
 			</Container>
 			<Container>
 				<BreadCrumbs

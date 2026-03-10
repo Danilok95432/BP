@@ -1,0 +1,11 @@
+.aboutContainerLayout {
+  @media (max-width: 768px) {
+    padding-top: 8px;
+  }
+}
+
+.noBottom {
+  @media (max-width: 768px) {
+    padding-bottom: 0;
+  }
+}

@@ -1,4 +1,7 @@
 .aboutGeneralPage {
+	@media (max-width: 768px) {
+		padding-right: 24px;
+	}
 	h2 {
 		margin-bottom: fluid(24, 16);
 	}
@@ -17,12 +20,66 @@
 			color: #9d9d9d;
 		}
 	}
+
+	.yearSelectWrapper {
+		width: 100%;
+		margin-bottom: 20px;
+		max-width: 93px;
+		position: relative;
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			right: 16px;
+			transform: translateY(-50%);
+			width: 0;
+			height: 0;
+			border-left: 6px solid transparent;
+			border-right: 6px solid transparent;
+			border-top: 8px solid black;
+			pointer-events: none; /* Чтобы стрелка не мешала кликать по селекту */
+		}
+	}
+
+	.yearSelect {
+		width: 100%;
+		max-width: 93px;
+		padding: 12px 16px;
+		font-size: 16px;
+		border: 1px solid #ccc;
+		border-radius: 8px;
+		background-color: white;
+		cursor: pointer;
+		outline: none;
+		appearance: none; /* Убирает стандартную стрелку */
+		-webkit-appearance: none;
+		-moz-appearance: none;
+
+		&:hover {
+			border-color: #999;
+		}
+
+		&:focus {
+			border-color: #007bff;
+			box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+		}
+
+		option:disabled {
+			color: #999;
+			background-color: #f5f5f5;
+		}
+	}
 	.laureatsGrid {
 		margin-top: 16px;
 		margin-bottom: 64px;
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 		gap: 26px;
+		@media (max-width: 768px) {
+			grid-template-columns: minmax(152px, 152px) minmax(152px, 152px);
+			gap: 16px;
+		}
 	}
 
 	.laureatCard {
@@ -38,7 +95,12 @@
 		transition:
 			transform 0.2s,
 			box-shadow 0.2s;
-
+		@media (max-width: 768px) {
+			max-width: 152px;
+			max-height: 152px;
+			width: 152px;
+			height: 152px;
+		}
 		&:hover {
 			transform: translateY(-2px);
 			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -61,6 +123,11 @@
 			z-index: 2;
 			margin-bottom: 28px;
 			text-align: center;
+			@media (max-width: 768px) {
+				font-size: 14px;
+				max-width: 70%;
+				margin-bottom: 6px;
+			}
 		}
 	}
 	.noLaureats {

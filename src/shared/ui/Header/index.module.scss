@@ -4,6 +4,15 @@
 	@media (max-width: 1340px) {
 		padding: 20px 0 15px 0;
 	}
+	@media (max-width: 768px) {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+		padding: 16px 24px;
+	}
+	.cont {
+		@media (max-width: 768px) {
+			padding: 0;
+		}
+	}
 	.headerRow {
 		width: 100%;
 		justify-content: space-between;

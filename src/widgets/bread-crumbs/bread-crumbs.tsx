@@ -44,7 +44,7 @@ export const BreadCrumbs: FC<BreadCrumbsProps> = ({ crumbsLinksMap }) => {
 			</li>
 
 			{pathNames?.map((pathEl, idx) => {
-				if (pathNames.length - 1 === idx && pathEl !== 'awards') {
+				if (pathNames.length - 1 === idx) {
 					return (
 						<li key={pathEl}>
 							<span>{additionalCrumbs ?? defineLinkTitle(pathEl)}</span>
@@ -52,7 +52,7 @@ export const BreadCrumbs: FC<BreadCrumbsProps> = ({ crumbsLinksMap }) => {
 					)
 				}
 
-				if (pathEl === 'laureates' || pathEl === 'awards') {
+				if (pathEl === 'laureates') {
 					return (
 						<li key={pathEl}>
 							<Link to={`${pathEl}`}>{defineLinkTitle(pathEl)}</Link>

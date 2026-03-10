@@ -18,12 +18,13 @@ div.aboutContentWrapper {
 	}
 }
 
-.aboutSideMenu {
+ul.aboutSideMenu {
 	margin-bottom: 20px;
 	@include mobile {
 		padding-top: 0;
 		padding-bottom: 30px;
 		margin-bottom: 0;
+		padding-right: 24px;
 	}
 }
 

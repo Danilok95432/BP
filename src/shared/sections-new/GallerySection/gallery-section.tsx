@@ -16,7 +16,10 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { eventsSliderFullScreenOptions, eventsSliderOptions } from './consts'
 
-export const GallerySection: FC<{ classNameSection?: string }> = ({ classNameSection }) => {
+export const GallerySection: FC<{ classNameSection?: string; photos?: ImageItemWithText[] }> = ({
+	classNameSection,
+	photos = [],
+}) => {
 	const swiperRef: RefObject<SwiperRef> = useRef<SwiperRef>(null)
 	const fullscreenSwiperRef: RefObject<SwiperRef> = useRef<SwiperRef>(null)
 
@@ -41,10 +44,11 @@ export const GallerySection: FC<{ classNameSection?: string }> = ({ classNameSec
 	}
 
 	const { prevBtnColor, nextBtnColor } = getButtonColors()
+	const images = photos && photos.length > 0 ? photos : eventData?.promo
 
 	useEffect(() => {
-		if (eventData?.promo && Array.isArray(eventData.promo)) {
-			setAllPagePhoto(eventData.promo)
+		if (images && Array.isArray(images)) {
+			setAllPagePhoto(images)
 		}
 	}, [eventData])
 
@@ -80,7 +84,7 @@ export const GallerySection: FC<{ classNameSection?: string }> = ({ classNameSec
 					onSlideChange={handleSlideChange}
 					onInit={(swiper) => setActiveIndex(swiper.activeIndex)}
 				>
-					{eventData?.promo.map((slideEl, idx) => {
+					{images?.map((slideEl, idx) => {
 						return (
 							<SwiperSlide key={slideEl.id}>
 								<FlexRow className={styles.slideRow}>

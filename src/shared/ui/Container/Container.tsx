@@ -6,6 +6,7 @@ type ContainerProps = {
 	className?: string
 	children: ReactNode
 	off?: boolean
+	offRight?: boolean
 }
 
 export const Container: FC<ContainerProps> = ({ className, children, off }) => {

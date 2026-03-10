@@ -16,7 +16,7 @@ export const AwardsLayout = () => {
 				<title>Конкурс премий</title>
 			</Helmet>
 			<div className={styles.aboutLayout}>
-				<Container>
+				<Container className={styles.aboutCont}>
 					<BreadCrumbs
 						crumbsLinksMap={[
 							{
@@ -33,7 +33,7 @@ export const AwardsLayout = () => {
 					</>
 				)}
 				<Outlet />
-				<Container>
+				<Container className={styles.aboutCont}>
 					<BreadCrumbs
 						crumbsLinksMap={[
 							{

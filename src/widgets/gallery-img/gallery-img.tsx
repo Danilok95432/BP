@@ -278,20 +278,12 @@ export const GalleryImg: FC<ImageGalleryProps> = ({
 									<div className={styles.slideImg}>
 										<img src={slideItem.original} alt={slideItem.title} />
 									</div>
-									<h6>{slideItem.title}</h6>
-									{slideItem.author !== '' ? (
-										<span className={styles.author}>Автор: {slideItem.author}</span>
-									) : null}
 								</div>
 							</SwiperSlide>
 						))}
 					</Swiper>
 
-					<SliderBtns
-						className={styles.galleryBtns}
-						swiperRef={swiperRef}
-						color={breakpoint === 'XS' ? '#FFF' : '#5C5C5C'}
-					/>
+					<SliderBtns className={styles.galleryBtns} swiperRef={swiperRef} />
 				</div>
 			) : (
 				<ul className={cn(styles.gridGallery, listClassName)}>
