@@ -3,6 +3,9 @@ import { Helmet } from 'react-helmet-async'
 
 import styles from './index.module.scss'
 import { useAdditionalCrumbs } from 'src/app/store/hooks/additional-crumbs'
+import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
+import { DocFileIconSVG } from 'src/shared/ui/icons/docFileIconSVG'
+import { PDFFileIconSVG } from 'src/shared/ui/icons/pdfFileIconSVG'
 
 export const AwardDocs: FC = () => {
 	// const [allPagePhoto] = useState<ImageItemWithText[]>([])
@@ -19,13 +22,32 @@ export const AwardDocs: FC = () => {
 	// 	}
 	// }, [aboutPageData])
 	useAdditionalCrumbs('<...>')
-	const rulesData = {
-		descs: [
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-			'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?',
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-		],
-	}
+	const docs = [
+		{
+			id: '1',
+			name: 'Положение о Премии',
+			format: 'pdf',
+			size: '68,5 КВ',
+		},
+		{
+			id: '2',
+			name: 'Регламент приема работ конкурсов Премии',
+			format: 'pdf',
+			size: '68,5 КВ',
+		},
+		{
+			id: '3',
+			name: 'Положение об участии партнеров и спонсоров Премии',
+			format: 'doc',
+			size: '68,5 КВ',
+		},
+		{
+			id: '4',
+			name: 'Медиа-кит (информация и графики для прессы)',
+			format: 'doc',
+			size: '68,5 КВ',
+		},
+	]
 	return (
 		<div className={styles.awardDocsPage}>
 			<Helmet>
@@ -33,10 +55,22 @@ export const AwardDocs: FC = () => {
 			</Helmet>
 
 			<div className={styles.inner}>
-				<h2>Документы</h2>
-				{rulesData?.descs && (
-					<div className={styles.mainDescs} dangerouslySetInnerHTML={{ __html: rulesData.descs }} />
-				)}
+				<h2>Документы номинации</h2>
+				<FlexRow className={styles.docsList}>
+					{docs.map((doc) => {
+						return (
+							<a key={doc.id} className={styles.doc}>
+								<div className={styles.file}>
+									{doc.format === 'pdf' ? <PDFFileIconSVG /> : <DocFileIconSVG />}
+								</div>
+								<FlexRow className={styles.info}>
+									<p className={styles.title}>{doc.name}</p>
+									<p>{doc.size}</p>
+								</FlexRow>
+							</a>
+						)
+					})}
+				</FlexRow>
 			</div>
 		</div>
 	)
