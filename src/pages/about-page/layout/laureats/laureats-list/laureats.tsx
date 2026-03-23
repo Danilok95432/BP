@@ -5,41 +5,50 @@ import styles from './index.module.scss'
 import { YearsFilterSlider } from 'src/widgets/years-filter-slider/years-filter-slider'
 import laureatSkeletonCard from 'src/assets/img/card-laureat-skeleton.png'
 import { Link } from 'react-router-dom'
-import { laureats } from '../consts'
 import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
+import { useGetAllLaureatsQuery } from 'src/features/about/api/about'
 
 export const AboutLaureats: FC = () => {
-	const yearsList = [
-		{ year: '2026', isActive: true },
-		{ year: '2025', isActive: true },
-		{ year: '2024', isActive: true },
-		{ year: '2023', isActive: true },
-		{ year: '2022', isActive: true },
-		{ year: '2021', isActive: true },
-		{ year: '2020', isActive: true },
-		{ year: '2019', isActive: true },
-		{ year: '2018', isActive: true },
-		{ year: '2017', isActive: true },
-		{ year: '2016', isActive: true },
-		{ year: '2015', isActive: true },
-		{ year: '2014', isActive: true },
-		{ year: '2013', isActive: true },
-	]
+	const { data: laureatsData } = useGetAllLaureatsQuery(null)
 
 	const breakPoint = useBreakPoint()
-	const [activeYear, setActiveYear] = useState('2025')
+	const [activeYear, setActiveYear] = useState('')
 
 	const handleChangeActiveYear = (newYear: string) => {
 		setActiveYear(newYear)
 	}
 
+	// Формируем список уникальных годов из данных
+	const yearsList = useMemo(() => {
+		if (!laureatsData?.laureats?.length) return []
+
+		// Получаем уникальные года и сортируем по убыванию
+		const years = [...new Set(laureatsData.laureats.map((laureat) => laureat.laureat_year))].sort(
+			(a, b) => Number(b) - Number(a),
+		)
+
+		// Формируем массив объектов с информацией о доступности года
+		// Все года активны, так как они есть в данных
+		return years.map((year) => ({
+			year,
+			isActive: true,
+		}))
+	}, [laureatsData?.laureats])
+
+	// Устанавливаем активный год при первом получении данных
+	useMemo(() => {
+		if (yearsList.length > 0 && !activeYear) {
+			setActiveYear(yearsList[0].year)
+		}
+	}, [yearsList, activeYear])
+
 	// Фильтруем лауреатов по году, совпадающему с activeYear
 	const filteredLaureats = useMemo(() => {
-		return laureats.filter((laureat) => {
-			const laureatYear = laureat.nominateDate.split('-')[0]
-			return laureatYear === activeYear
+		if (!laureatsData?.laureats) return []
+		return laureatsData.laureats.filter((laureat) => {
+			return laureat.laureat_year === activeYear
 		})
-	}, [laureats, activeYear])
+	}, [laureatsData?.laureats, activeYear])
 
 	// Преобразуем yearsList в формат для Select
 	const yearOptions = yearsList.map((item) => ({
@@ -58,35 +67,44 @@ export const AboutLaureats: FC = () => {
 				<h2>Именитые лауреаты</h2>
 
 				{/* Условный рендеринг фильтра */}
-				{breakPoint === 'S' ? (
-					<div className={styles.yearSelectWrapper}>
-						<select
-							value={activeYear}
-							onChange={(e) => handleChangeActiveYear(e.target.value)}
-							className={styles.yearSelect}
-						>
-							{yearOptions.map((option) => (
-								<option key={option.value} value={option.value} disabled={option.disabled}>
-									{option.label}
-								</option>
-							))}
-						</select>
-					</div>
-				) : (
-					<YearsFilterSlider
-						yearsList={yearsList ?? []}
-						changeActiveYear={handleChangeActiveYear}
-						activeYear={activeYear}
-					/>
-				)}
+				{yearsList.length > 0 &&
+					(breakPoint === 'S' ? (
+						<div className={styles.yearSelectWrapper}>
+							<select
+								value={activeYear}
+								onChange={(e) => handleChangeActiveYear(e.target.value)}
+								className={styles.yearSelect}
+							>
+								{yearOptions.map((option) => (
+									<option key={option.value} value={option.value} disabled={option.disabled}>
+										{option.label}
+									</option>
+								))}
+							</select>
+						</div>
+					) : (
+						<YearsFilterSlider
+							yearsList={yearsList}
+							changeActiveYear={handleChangeActiveYear}
+							activeYear={activeYear}
+						/>
+					))}
 
 				{/* Список карточек лауреатов */}
 				<div className={styles.laureatsGrid}>
 					{filteredLaureats.length > 0 ? (
 						filteredLaureats.map((laureat) => (
 							<Link key={laureat.id} className={styles.laureatCard} to={`${laureat.id}`}>
-								<div className={styles.laureatName}>{laureat.name}</div>
-								<img className={styles.imgLaureat} src={laureatSkeletonCard} alt={laureat.name} />
+								<div className={styles.laureatName}>{laureat.laureat_name}</div>
+								<img
+									className={styles.imgLaureat}
+									src={
+										laureat.mainphoto.length > 0
+											? laureat.mainphoto[0].original
+											: laureatSkeletonCard
+									}
+									alt={laureat.laureat_name}
+								/>
 							</Link>
 						))
 					) : (

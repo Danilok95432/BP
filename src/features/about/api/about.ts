@@ -17,12 +17,12 @@ export const aboutApi = createApi({
 		}),
 		getAllLaureats: build.query<LaureatsResponse, null>({
 			query: () => ({
-				url: `vids`,
+				url: `laureats`,
 			}),
 		}),
 		getLaureatInfoById: build.query<LaureatItemResponse, string>({
 			query: (id) => ({
-				url: `vids/${id}`,
+				url: `laureats/${id}`,
 				params: {
 					id,
 				},

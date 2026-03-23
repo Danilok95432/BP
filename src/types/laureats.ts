@@ -10,16 +10,13 @@ export type LaureatItemResponse = {
 
 export type LaureatInfoResponse = {
 	id: string
-	title: string
-	desc: string
-	rule: string
+	laureat_name: string
+	laureat_info: string
+	laureat_year: string
+	laureat_desc: string
+	laureat_full: string
 	mainphoto: ImageItemWithText[]
 	photos: ImageItemWithText[]
-	is_etnosport: boolean
-	is_single: boolean
-	is_group: boolean
-	users_count: string
-	groups_count: string
 }
 
 export type LaureatsList = {
@@ -37,15 +34,11 @@ export type LaureatsList = {
 
 export type LaureatItem = {
 	id: string
-	title: string
-	desc: string
-	rule: string
+	laureat_name: string
+	laureat_year: string
+	laureat_info: string
+	laureat_desc: string
 	mainphoto: ImageItemWithText[]
-	is_etnosport: boolean
-	is_single: boolean
-	is_group: boolean
-	users_count: string
-	groups_count: string
 }
 
 export type EtnosportSubEventItem = {
