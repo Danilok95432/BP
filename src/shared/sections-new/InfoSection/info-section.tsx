@@ -17,7 +17,7 @@ export const InfoMainSection = () => {
 								<p className={styles.title}>35 лет</p>
 								<p>премия основана в 1990 году</p>
 							</FlexRow>
-							<FlexRow className={styles.infoRowEl}>
+							<FlexRow className={classNames(styles.infoRowEl, styles.end)}>
 								<p className={styles.title}>{'>200 лауреатов'}</p>
 								<p>некоммерческая премия</p>
 							</FlexRow>

@@ -2,23 +2,23 @@ import { useEffect, useState, type FC } from 'react'
 import { Helmet } from 'react-helmet-async'
 
 import styles from './index.module.scss'
-import { GallerySection } from 'src/shared/sections-new/GallerySection/gallery-section'
 import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
 import { TgEventIconSVG } from 'src/shared/ui/icons/tgEventIconSVG'
 import { type ImageItemWithText } from 'src/types/photos'
-import { useGetAboutGeneralQuery } from 'src/features/about/api/about'
+import { useGetPageHeaderQuery } from 'src/features/pages-header/api/pages-header.api'
+import { GalleryImg } from 'src/widgets/gallery-img/gallery-img'
 
 export const AboutHistory: FC = () => {
 	const [allPagePhoto, setAllPagePhoto] = useState<ImageItemWithText[]>([])
-	const { data: aboutPageData } = useGetAboutGeneralQuery(null)
+	const { data: aboutPageData } = useGetPageHeaderQuery('premia')
 	useEffect(() => {
 		if (aboutPageData) {
 			const images: ImageItemWithText[] = []
-			if (aboutPageData?.mainphoto[0]) {
-				images.push(aboutPageData?.mainphoto[0])
+			if (aboutPageData?.page.mainphoto[0]) {
+				images.push(aboutPageData?.page.mainphoto[0])
 			}
-			if (aboutPageData.photoGallery && Array.isArray(aboutPageData.photoGallery)) {
-				images.push(...aboutPageData.photoGallery)
+			if (aboutPageData.page.photoGallery && Array.isArray(aboutPageData.page.photoGallery)) {
+				images.push(...aboutPageData.page.photoGallery)
 			}
 			setAllPagePhoto(images)
 		}
@@ -32,11 +32,11 @@ export const AboutHistory: FC = () => {
 
 			<div className={styles.inner}>
 				<h2>Детали и история</h2>
-				<GallerySection photos={allPagePhoto} classNameSection={styles.gallery} />
-				{aboutPageData?.descs && (
+				<GalleryImg allPageImages={allPagePhoto} className={styles.gallery} />
+				{aboutPageData?.page.full2 && (
 					<div
 						className={styles.mainDescs}
-						dangerouslySetInnerHTML={{ __html: aboutPageData.descs }}
+						dangerouslySetInnerHTML={{ __html: aboutPageData.page.full2 }}
 					/>
 				)}
 				{/* <div className={styles.infoWrapper}>
@@ -69,12 +69,6 @@ export const AboutHistory: FC = () => {
 						</FlexRow>
 					</FlexRow>
 				</div> */}
-				{aboutPageData?.descs && (
-					<div
-						className={styles.mainDescs}
-						dangerouslySetInnerHTML={{ __html: aboutPageData.descs }}
-					/>
-				)}
 				{/* <HistorySection noTitle className={styles.historySection} /> */}
 
 				<FlexRow className={styles.contactsRow}>

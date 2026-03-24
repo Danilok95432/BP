@@ -11,8 +11,8 @@ interface IAwardCard {
 	id: string
 	title: string
 	status: string
-	requests: number
-	dateTo: string
+	requests?: number
+	dateTo?: string
 }
 
 type AwardCardProps = {
@@ -33,11 +33,11 @@ export const AwardCard: FC<AwardCardProps> = ({ award }) => {
 				<h2 className={styles.title}>{award.title}</h2>
 				<FlexRow className={styles.infoWrapper}>
 					<FlexRow className={styles.topBlock}>
-						<p>{award.status}</p>
+						<p>{'Статус неизвестен'}</p>
 						<SeparatorIconNavigationSVG color={isHovered ? 'white' : 'black'} />
-						<p>{`Подано ${award.requests} заявок`}</p>
+						<p>{`Подано ${award.requests ?? 'неизвестное количество'} заявок`}</p>
 					</FlexRow>
-					<p>{`Прием заявок до ${mainFormatDate(award.dateTo)}`}</p>
+					<p>{`Прием заявок до ${mainFormatDate(award.dateTo) === null ? 'неизвестной даты' : mainFormatDate(award.dateTo)}`}</p>
 				</FlexRow>
 			</FlexRow>
 		</Link>

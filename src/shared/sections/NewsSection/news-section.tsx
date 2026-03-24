@@ -58,7 +58,7 @@ export const NewsSection: FC<NewsProps> = ({ id }) => {
 				topNewsItems = filtered.slice(0, 1)
 			}
 		} else {
-			topNewsItems = sortedNews.slice(0, 5)
+			topNewsItems = sortedNews.slice(0, 4)
 		}
 
 		return { mainNews: mainNewsItem, topNews: topNewsItems }

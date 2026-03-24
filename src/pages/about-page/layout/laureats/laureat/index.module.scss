@@ -34,6 +34,13 @@ div.laureatDetails {
 			@include mobile {
 				flex-direction: column;
 			}
+			h2 {
+				font-size: 36px;
+			}
+			.subtitle {
+				font-weight: 600;
+				margin-bottom: 24px;
+			}
 		
 			p {
 				flex-grow: 1;

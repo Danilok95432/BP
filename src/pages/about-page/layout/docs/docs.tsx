@@ -5,48 +5,10 @@ import styles from './index.module.scss'
 import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
 import { PDFFileIconSVG } from 'src/shared/ui/icons/pdfFileIconSVG'
 import { DocFileIconSVG } from 'src/shared/ui/icons/docFileIconSVG'
+import { useGetPageHeaderQuery } from 'src/features/pages-header/api/pages-header.api'
 
 export const AboutDocs: FC = () => {
-	// const [allPagePhoto] = useState<ImageItemWithText[]>([])
-	// useEffect(() => {
-	// 	if (aboutPageData) {
-	// 		const images: ImageItemWithText[] = []
-	// 		if (aboutPageData?.mainphoto[0]) {
-	// 			images.push(aboutPageData?.mainphoto[0])
-	// 		}
-	// 		if (aboutPageData.photoGallery && Array.isArray(aboutPageData.photoGallery)) {
-	// 			images.push(...aboutPageData.photoGallery)
-	// 		}
-	// 		setAllPagePhoto(images)
-	// 	}
-	// }, [aboutPageData])
-
-	const docs = [
-		{
-			id: '1',
-			name: 'Положение о Премии',
-			format: 'pdf',
-			size: '68,5 КВ',
-		},
-		{
-			id: '2',
-			name: 'Регламент приема работ конкурсов Премии',
-			format: 'pdf',
-			size: '68,5 КВ',
-		},
-		{
-			id: '3',
-			name: 'Положение об участии партнеров и спонсоров Премии',
-			format: 'doc',
-			size: '68,5 КВ',
-		},
-		{
-			id: '4',
-			name: 'Медиа-кит (информация и графики для прессы)',
-			format: 'doc',
-			size: '68,5 КВ',
-		},
-	]
+	const { data: aboutPageData } = useGetPageHeaderQuery('premia')
 	return (
 		<div className={styles.aboutGeneralPage}>
 			<Helmet>
@@ -56,15 +18,26 @@ export const AboutDocs: FC = () => {
 			<div className={styles.inner}>
 				<h2>Документы премии</h2>
 				<FlexRow className={styles.docsList}>
-					{docs.map((doc) => {
+					{aboutPageData?.page.documents.map((doc) => {
 						return (
-							<a key={doc.id} className={styles.doc}>
+							<a
+								key={doc.id}
+								className={styles.doc}
+								href={doc.url}
+								download={doc.url}
+								target='_blank'
+								rel='noreferrer'
+							>
 								<div className={styles.file}>
-									{doc.format === 'pdf' ? <PDFFileIconSVG /> : <DocFileIconSVG />}
+									{doc.name.split('.')[doc.name.split('.').length - 1] === 'pdf' ? (
+										<PDFFileIconSVG />
+									) : (
+										<DocFileIconSVG />
+									)}
 								</div>
 								<FlexRow className={styles.info}>
-									<p className={styles.title}>{doc.name}</p>
-									<p>{doc.size}</p>
+									<p className={styles.title}>{doc.name.split('.')[0]}</p>
+									<p>{'68,5 КВ'}</p>
 								</FlexRow>
 							</a>
 						)

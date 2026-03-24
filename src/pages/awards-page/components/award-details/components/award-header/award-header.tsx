@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import styles from './index.module.scss'
 import { type ImageItemWithText } from 'src/types/photos'
 import { GalleryImg } from 'src/widgets/gallery-img/gallery-img'
@@ -8,70 +8,24 @@ import { formatTimeLeft } from 'src/shared/helpers/utils'
 import { useActions } from 'src/app/store/hooks/actions'
 import { BuyTicketModal } from 'src/modals/buy-ticket-modal/buy-ticket-modal'
 import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
+import { useGetEventByIdQuery } from 'src/features/home/api/home.api'
+import { useParams } from 'react-router-dom'
 
 export const AwardHeader: FC = () => {
-	// const location = useLocation()
-	// const { data: aboutPageData } = useGetAboutGeneralQuery(null)
+	const { id } = useParams()
+	const { data: eventData } = useGetEventByIdQuery(id ?? '')
 
-	// const { data: aboutHistoryData } = useGetAboutHistoryQuery(null, {
-	// 	skip: location.pathname !== '/about/about-history',
-	// })
-	// const { data: aboutNatureData } = useGetAboutNatureQuery(null, {
-	// 	skip: location.pathname !== '/about/about-nature',
-	// })
-	// const { data: aboutContactsData } = useGetAboutContactsQuery(null, {
-	// 	skip: location.pathname !== '/about/about-contacts',
-	// })
-	// const { data: aboutTraditionData } = useGetAboutTraditionsQuery(null, {
-	// 	skip: location.pathname !== '/about/about-traditions',
-	// })
-	// const { data: aboutGamesData } = useGetAboutGamesQuery(null, {
-	// 	skip: location.pathname !== '/about/about-games',
-	// })
+	const [allPagePhoto, setAllPagePhoto] = useState<ImageItemWithText[]>([])
 
-	// const getPhotosForCurrentPage = (): ImageItemWithText[] => {
-	// 	switch (location.pathname) {
-	// 		case '/about':
-	// 			return aboutPageData?.photoGallery ?? []
-	// 		case '/about/about-history':
-	// 			return aboutHistoryData?.photos ?? []
-	// 		case '/about/about-nature':
-	// 			return aboutNatureData?.photos ?? []
-	// 		case '/about/about-contacts':
-	// 			return aboutContactsData?.photos ?? []
-	// 		case '/about/about-traditions':
-	// 			return aboutTraditionData?.photoGallery ?? []
-	// 		case '/about/about-games':
-	// 			return aboutGamesData?.photoGallery ?? []
-	// 		default:
-	// 			return []
-	// 	}
-	// }
+	useEffect(() => {
+		const images: ImageItemWithText[] = []
 
-	const [allPagePhoto] = useState<ImageItemWithText[]>([])
+		if (eventData?.mainphoto[0]) {
+			images.push(eventData?.mainphoto[0])
+		}
 
-	// useEffect(() => {
-	// 	const photos = getPhotosForCurrentPage()
-	// 	const images: ImageItemWithText[] = []
-
-	// 	if (aboutPageData?.mainphoto[0]) {
-	// 		images.push(aboutPageData?.mainphoto[0])
-	// 	}
-
-	// 	if (photos.length > 0) {
-	// 		images.push(...photos)
-	// 	}
-
-	// 	setAllPagePhoto(images)
-	// }, [
-	// 	aboutPageData,
-	// 	aboutHistoryData,
-	// 	aboutNatureData,
-	// 	aboutContactsData,
-	// 	aboutTraditionData,
-	// 	aboutGamesData,
-	// 	location.pathname,
-	// ])
+		setAllPagePhoto(images)
+	}, [location.pathname])
 	const { openModal } = useActions()
 
 	const nominationData = {
@@ -84,12 +38,12 @@ export const AwardHeader: FC = () => {
 	return (
 		<div className={styles.awardLayoutHeaderPageContent}>
 			<div className={styles.leftSideHeader}>
-				<h2 className={styles.title}>{'Номинация <...>'}</h2>
+				<h2 className={styles.title}>{eventData?.title}</h2>
 				<div className={styles.blockquoteBody}>
-					{nominationData?.desc && (
+					{eventData?.description && (
 						<div
 							className={styles.mainDescs}
-							dangerouslySetInnerHTML={{ __html: nominationData.desc }}
+							dangerouslySetInnerHTML={{ __html: eventData?.description }}
 						/>
 					)}
 					{/* {aboutPageData?.caption && aboutPageData?.caption_show && (

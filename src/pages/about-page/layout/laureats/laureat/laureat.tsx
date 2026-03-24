@@ -31,7 +31,16 @@ export const LaureatDetails = () => {
 				<div className={styles.laureatMain}>
 					<h2>{laureatInfo?.laureats.laureat_name}</h2>
 					{laureatInfo?.laureats.laureat_info && (
-						<div dangerouslySetInnerHTML={{ __html: laureatInfo?.laureats.laureat_info }} />
+						<div
+							className={styles.subtitle}
+							dangerouslySetInnerHTML={{ __html: laureatInfo?.laureats.laureat_info }}
+						/>
+					)}
+					{laureatInfo?.laureats.laureat_desc && (
+						<div
+							dangerouslySetInnerHTML={{ __html: laureatInfo?.laureats.laureat_desc }}
+							className={styles.bottomDesc}
+						/>
 					)}
 				</div>
 				<div className={styles.laureatLogo}>

@@ -6,48 +6,13 @@ import { useAdditionalCrumbs } from 'src/app/store/hooks/additional-crumbs'
 import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
 import { DocFileIconSVG } from 'src/shared/ui/icons/docFileIconSVG'
 import { PDFFileIconSVG } from 'src/shared/ui/icons/pdfFileIconSVG'
+import { useParams } from 'react-router-dom'
+import { useGetEventByIdQuery } from 'src/features/home/api/home.api'
 
 export const AwardDocs: FC = () => {
-	// const [allPagePhoto] = useState<ImageItemWithText[]>([])
-	// useEffect(() => {
-	// 	if (aboutPageData) {
-	// 		const images: ImageItemWithText[] = []
-	// 		if (aboutPageData?.mainphoto[0]) {
-	// 			images.push(aboutPageData?.mainphoto[0])
-	// 		}
-	// 		if (aboutPageData.photoGallery && Array.isArray(aboutPageData.photoGallery)) {
-	// 			images.push(...aboutPageData.photoGallery)
-	// 		}
-	// 		setAllPagePhoto(images)
-	// 	}
-	// }, [aboutPageData])
-	useAdditionalCrumbs('<...>')
-	const docs = [
-		{
-			id: '1',
-			name: 'Положение о Премии',
-			format: 'pdf',
-			size: '68,5 КВ',
-		},
-		{
-			id: '2',
-			name: 'Регламент приема работ конкурсов Премии',
-			format: 'pdf',
-			size: '68,5 КВ',
-		},
-		{
-			id: '3',
-			name: 'Положение об участии партнеров и спонсоров Премии',
-			format: 'doc',
-			size: '68,5 КВ',
-		},
-		{
-			id: '4',
-			name: 'Медиа-кит (информация и графики для прессы)',
-			format: 'doc',
-			size: '68,5 КВ',
-		},
-	]
+	const { id } = useParams()
+	const { data: eventData } = useGetEventByIdQuery(id ?? '')
+	useAdditionalCrumbs(eventData?.title)
 	return (
 		<div className={styles.awardDocsPage}>
 			<Helmet>
@@ -57,15 +22,26 @@ export const AwardDocs: FC = () => {
 			<div className={styles.inner}>
 				<h2>Документы номинации</h2>
 				<FlexRow className={styles.docsList}>
-					{docs.map((doc) => {
+					{eventData?.documents?.map((doc) => {
 						return (
-							<a key={doc.id} className={styles.doc}>
+							<a
+								key={doc.id}
+								className={styles.doc}
+								href={doc.url}
+								download={doc.url}
+								target='_blank'
+								rel='noreferrer'
+							>
 								<div className={styles.file}>
-									{doc.format === 'pdf' ? <PDFFileIconSVG /> : <DocFileIconSVG />}
+									{doc.name.split('.')[doc.name.split('.').length - 1] === 'pdf' ? (
+										<PDFFileIconSVG />
+									) : (
+										<DocFileIconSVG />
+									)}
 								</div>
 								<FlexRow className={styles.info}>
-									<p className={styles.title}>{doc.name}</p>
-									<p>{doc.size}</p>
+									<p className={styles.title}>{doc.name.split('.')[0]}</p>
+									<p>{'68,5 КВ'}</p>
 								</FlexRow>
 							</a>
 						)

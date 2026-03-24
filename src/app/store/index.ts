@@ -5,6 +5,7 @@ import { contentApi } from 'src/features/content/api/content'
 import { uploadFilesApi } from 'src/features/files/api/files'
 import { homeApi } from 'src/features/home/api/home.api'
 import { modalReducer } from 'src/features/modal/store/modal.slice'
+import { pagesHeaderApi } from 'src/features/pages-header/api/pages-header.api'
 import { NameSpace } from 'src/shared/helpers/consts'
 import { breadCrumbsReducer } from 'src/widgets/bread-crumbs/store/bread-crumbs.slice'
 
@@ -17,6 +18,7 @@ export const store = configureStore({
 		[aboutApi.reducerPath]: aboutApi.reducer,
 		[contentApi.reducerPath]: contentApi.reducer,
 		[uploadFilesApi.reducerPath]: uploadFilesApi.reducer,
+		[pagesHeaderApi.reducerPath]: pagesHeaderApi.reducer,
 	},
 	devTools: true,
 	middleware: (getDefaultMiddleware) =>
@@ -26,6 +28,7 @@ export const store = configureStore({
 			aboutApi.middleware,
 			contentApi.middleware,
 			uploadFilesApi.middleware,
+			pagesHeaderApi.middleware,
 		),
 })
 

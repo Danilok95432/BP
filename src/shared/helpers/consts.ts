@@ -14,6 +14,7 @@ export enum ReducerPath {
 	Heroes = 'heroes/api',
 	Cicles = 'cicles/api',
 	UploadFiles = 'uploadFiles/api',
+	PagesHeaderApi = 'pages/api',
 }
 
 export const ImagesFormat = ['png', 'jpeg', 'jpg', 'webp', 'gif']

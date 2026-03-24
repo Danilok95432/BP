@@ -137,6 +137,10 @@ export type EventItem = {
 	contact_email?: string
 	contact_telphone?: string
 	contact_tg?: string
+	rules?: {
+		rule_name: string
+		rule_text: string
+	}
 } & Omit<CardEventItem, 'date'>
 
 export type CardEventItem = {
