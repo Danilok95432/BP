@@ -1,0 +1,44 @@
+.aboutGeneralPage {
+	@media (max-width: 768px) {
+		padding-right: 24px;
+	}
+	h2 {
+		margin-bottom: fluid(27, 15);
+	}
+
+	.inner {
+		display: flex;
+		flex-direction: column;
+		row-gap: fluid(30, 20);
+	}
+
+	.blockquoteBody {
+		.mainDescs {
+			margin: 0 0 15px 0;
+		}
+		span {
+			font-size: 15px;
+			color: #9d9d9d;
+		}
+	}
+	.creditsList {
+		flex-direction: column;
+		gap: 24px;
+    margin-bottom: 64px;
+		.creditItem {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      .title {
+        font-weight: 500;
+        font-size: 18px;
+        color: #000;
+      }
+      p {
+        font-size: 16px;
+        color: #00000079;
+      }
+		}
+	}
+}

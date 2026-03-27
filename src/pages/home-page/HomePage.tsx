@@ -6,18 +6,20 @@ import { PartnersSection } from 'src/shared/sections/PartnersSection/partners-se
 import { MainImgSection } from 'src/shared/sections-new/MainImgSection/mainImgSection'
 import { HistorySection } from 'src/shared/sections-new/HistorySection/historySection'
 import { InfoMainSection } from 'src/shared/sections-new/InfoSection/info-section'
+import { useGetSettingsSiteQuery } from 'src/features/home/api/home.api'
 
 export const HomePage = () => {
+	const { data: settingsData } = useGetSettingsSiteQuery(null)
 	return (
 		<>
-			<MainImgSection />
-			<NewsSection id={'1'} />
-			<HistorySection />
-			{/* <EventsSection /> */}
-			<InfoMainSection />
-			<VideosSection id={'1'} />
-			<PartnersSection id={'1'} />
-			<FaqSection id={'1'} />
+			{settingsData?.isShowPromo && <MainImgSection />}
+			{settingsData?.isShowNews && <NewsSection id={'1'} />}
+			{settingsData?.isShowHistory && <HistorySection />}
+			{/* {settingsData?.isShowEvents && <EventsSection />} */}
+			{settingsData?.isShowInfo && <InfoMainSection />}
+			{settingsData?.isShowVideos && <VideosSection id={'1'} />}
+			{settingsData?.isShowPartners && <PartnersSection id={'1'} />}
+			{settingsData?.isShowFaq && <FaqSection id={'1'} />}
 		</>
 	)
 }

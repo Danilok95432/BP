@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { MAIN_PROD_URL, ReducerPath } from 'src/shared/helpers/consts'
 import { type AboutGeneralPage } from 'src/types/about'
+import { type ContactsInfo } from 'src/types/contacts'
 import { type LaureatItemResponse, type LaureatsResponse } from 'src/types/laureats'
 
 export const aboutApi = createApi({
@@ -28,8 +29,17 @@ export const aboutApi = createApi({
 				},
 			}),
 		}),
+		getContacts: build.query<ContactsInfo, string>({
+			query: () => ({
+				url: `contacts/getinfo`,
+			}),
+		}),
 	}),
 })
 
-export const { useGetAboutGeneralQuery, useGetAllLaureatsQuery, useGetLaureatInfoByIdQuery } =
-	aboutApi
+export const {
+	useGetAboutGeneralQuery,
+	useGetAllLaureatsQuery,
+	useGetLaureatInfoByIdQuery,
+	useGetContactsQuery,
+} = aboutApi

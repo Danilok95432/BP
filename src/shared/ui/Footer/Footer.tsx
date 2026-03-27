@@ -2,14 +2,15 @@ import { Container } from '../Container/Container'
 import { FlexRow } from '../FlexRow/FlexRow'
 import styles from './index.module.scss'
 import { VkSocialSvg } from '../icons/vkSocialSVG'
-import { TelegramSocialSvg } from '../icons/telegramSocialSVG'
-import { SeparatorIconSVG } from '../icons/separatorIconSVG'
+// import { SeparatorIconSVG } from '../icons/separatorIconSVG'
 import cn from 'classnames'
 import { navigationElements } from './consts'
 import { useNavigate } from 'react-router-dom'
+import { useGetSettingsSiteQuery } from 'src/features/home/api/home.api'
 
 export const Footer = () => {
 	const navigate = useNavigate()
+	const { data: settingsData } = useGetSettingsSiteQuery(null)
 	return (
 		<footer className={styles.footer}>
 			<Container>
@@ -25,31 +26,41 @@ export const Footer = () => {
 									</button>
 								))}
 							</ul>
-							<button
+							{/* <button
 								className={styles.personMenu}
 								aria-label='Лаборатория Доуэля'
 								title='Лаборатория Доуэля'
 							>
 								<SeparatorIconSVG color='#fff' />
 								<p>Лаборатория Доуэля</p>
-							</button>
+							</button> */}
 						</div>
 						<FlexRow className={styles.socialsRow}>
-							<div className={styles.socialEl}>
+							<a
+								className={styles.socialEl}
+								href={settingsData?.vk}
+								target='_blank'
+								rel='noreferrer'
+							>
 								<VkSocialSvg color='#fff' />
-							</div>
-							<div className={styles.socialEl}>
+							</a>
+							{/* <div className={styles.socialEl}>
 								<TelegramSocialSvg color='#fff' />
-							</div>
+							</div> */}
 						</FlexRow>
 					</FlexRow>
 					<FlexRow className={styles.bottomInfo}>
 						<FlexRow className={styles.contactsRow}>
-							<p>+7 (925) 314-38-58</p>
-							<p>belyaevprize@gmail.com</p>
+							<p>{settingsData?.phone}</p>
+							<p>{settingsData?.email}</p>
 						</FlexRow>
 						<FlexRow className={styles.author}>
-							<p className={styles.title}>© Беляевская премия, 2026</p>
+							<p className={styles.title}>
+								© Беляевская премия, 2026
+								<br />
+								Международная литературная премия имени Александра Беляева. Портал разработан НПО
+								ТАУ на платформе ТАУ-6
+							</p>
 						</FlexRow>
 					</FlexRow>
 				</FlexRow>

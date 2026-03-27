@@ -29,6 +29,7 @@ import { ProjectDetails } from 'src/pages/fond-page/layout/projects/project/proj
 import { FondDocs } from 'src/pages/fond-page/layout/docs/docs'
 import { BelyaevPage } from 'src/pages/belyaev-page/belyaev-page'
 import { Belyaev } from 'src/pages/belyaev-page/components/belyaev'
+import { FondCredits } from 'src/pages/fond-page/layout/credits/credits'
 
 export const MainRoutes = () => {
 	return (
@@ -52,6 +53,7 @@ export const MainRoutes = () => {
 						<Route path=':id' element={<ProjectDetails />} />
 					</Route>
 					<Route path={AppRoute.AboutDocs} element={<FondDocs />} />
+					<Route path={AppRoute.AboutCredits} element={<FondCredits />} />
 				</Route>
 				<Route path={AppRoute.About} element={<AboutLayout />}>
 					<Route index element={<AboutHistory />} />

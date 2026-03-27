@@ -4,6 +4,7 @@ export enum AppRoute {
 	About = 'about',
 	AboutLaureats = 'laureates',
 	AboutDocs = 'docs',
+	AboutCredits = 'credits',
 	Awards = 'awards',
 	Fond = 'fond',
 	AboutProjects = 'projects',

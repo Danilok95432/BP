@@ -9,6 +9,7 @@ import {
 import { type FiltrationInfo } from 'src/types/global'
 import { type CardNewsItem } from 'src/types/news'
 import { type ProgramDay, type SubEventResponse } from 'src/types/program'
+import { type SiteSettings } from 'src/types/settings'
 import { type VideoItem } from 'src/types/videos'
 
 export const homeApi = createApi({
@@ -87,6 +88,11 @@ export const homeApi = createApi({
 				},
 			}),
 		}),
+		getSettingsSite: build.query<SiteSettings, null>({
+			query: () => ({
+				url: `settings/getinfo`,
+			}),
+		}),
 	}),
 })
 
@@ -101,4 +107,5 @@ export const {
 	useGetSubEventProgramByIdQuery,
 	useGetFaqByIdQuery,
 	useGetCurrentEventIdQuery,
+	useGetSettingsSiteQuery,
 } = homeApi

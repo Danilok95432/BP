@@ -6,61 +6,13 @@ import styles from './index.module.scss'
 import cn from 'classnames'
 import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
 import { eventsSliderOptions } from './consts'
+import { useGetEventAwardsByIdQuery } from 'src/features/home/api/home.api'
 
 export const HistorySection: FC<{ noTitle?: boolean; className?: string }> = ({
 	noTitle = false,
 	className,
 }) => {
-	const history = [
-		{
-			id: '1',
-			dateName: '2025',
-			dateText:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-		},
-		{
-			id: '2',
-			dateName: '2024',
-			dateText:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-		},
-		{
-			id: '3',
-			dateName: '2023',
-			dateText:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-		},
-		{
-			id: '4',
-			dateName: '2022',
-			dateText:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-		},
-		{
-			id: '5',
-			dateName: '2021',
-			dateText:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-		},
-		{
-			id: '6',
-			dateName: '2020',
-			dateText:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-		},
-		{
-			id: '7',
-			dateName: '2019',
-			dateText:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-		},
-		{
-			id: '8',
-			dateName: '2018',
-			dateText:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-		},
-	]
+	const { data: history } = useGetEventAwardsByIdQuery('1')
 	const swiperRef: RefObject<SwiperRef> = useRef<SwiperRef>(null)
 	return (
 		<Section className={cn(styles.history, className)}>
@@ -72,7 +24,7 @@ export const HistorySection: FC<{ noTitle?: boolean; className?: string }> = ({
 				)}
 				<FlexRow className={styles.historyList}>
 					<Swiper {...eventsSliderOptions} ref={swiperRef}>
-						{history?.map((el) => {
+						{history?.dates.map((el) => {
 							return (
 								<SwiperSlide key={el.id}>
 									<div className={styles.historyEl}>
@@ -90,9 +42,9 @@ export const HistorySection: FC<{ noTitle?: boolean; className?: string }> = ({
 													strokeLinejoin='round'
 												/>
 											</svg>
-											<p>{el.dateName}</p>
+											<p>{el.datename}</p>
 										</FlexRow>
-										<p>{el.dateText}</p>
+										<p>{el.datetext}</p>
 									</div>
 								</SwiperSlide>
 							)

@@ -1,16 +1,16 @@
 import { Container } from '../Container/Container'
 import { FlexRow } from '../FlexRow/FlexRow'
 import styles from './index.module.scss'
-import { PersonIconSvg } from '../icons/personIconSVG'
+// import { PersonIconSvg } from '../icons/personIconSVG'
 import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import logo from 'src/assets/img/logo-bp.png'
 import logoMobile from 'src/assets/img/logo-mobile-bp.png'
-import { SearchIconSvg } from '../icons/searchIconSVG'
+// import { SearchIconSvg } from '../icons/searchIconSVG'
 
-import cn from 'classnames'
+// import cn from 'classnames'
 import { BurgerMenu } from 'src/widgets/main-navigation/components/burger-menu/burger-menu'
 
 export const Header = () => {
@@ -39,7 +39,7 @@ export const Header = () => {
 						</Link>
 					</FlexRow>
 					<FlexRow className={styles.controlsRow}>
-						<Link to={'/'} className={cn(styles.enterLK, styles.search)}>
+						{/* <Link to={'/'} className={cn(styles.enterLK, styles.search)}>
 							<div className={styles.vector}>
 								<SearchIconSvg />
 							</div>
@@ -48,7 +48,7 @@ export const Header = () => {
 							<div className={styles.vector}>
 								<PersonIconSvg />
 							</div>
-						</Link>
+						</Link> */}
 						{isSmallScreen && <BurgerMenu />}
 					</FlexRow>
 				</FlexRow>

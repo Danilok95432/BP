@@ -9,4 +9,8 @@ export const AboutMenuItems: NavigationItem[] = [
 		title: 'Документы фонда',
 		link: 'docs',
 	},
+	{
+		title: 'Реквизиты фонда',
+		link: 'credits',
+	},
 ]

@@ -2,8 +2,6 @@ import { useEffect, useState, type FC } from 'react'
 import { Helmet } from 'react-helmet-async'
 
 import styles from './index.module.scss'
-import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
-import { TgEventIconSVG } from 'src/shared/ui/icons/tgEventIconSVG'
 import { useGetPageHeaderQuery } from 'src/features/pages-header/api/pages-header.api'
 import { type ImageItemWithText } from 'src/types/photos'
 import { GalleryImg } from 'src/widgets/gallery-img/gallery-img'
@@ -39,7 +37,7 @@ export const AboutInfo: FC = () => {
 					/>
 				)}
 
-				<FlexRow className={styles.contactsRow}>
+				{/* <FlexRow className={styles.contactsRow}>
 					<h3>Контакты и реквизиты Беляевского Фонда</h3>
 					<FlexRow className={styles.wrapper}>
 						<FlexRow className={styles.iconWrapper}>
@@ -48,7 +46,7 @@ export const AboutInfo: FC = () => {
 						</FlexRow>
 						<p>belyaevprize@gmail.com</p>
 					</FlexRow>
-				</FlexRow>
+				</FlexRow> */}
 			</div>
 		</div>
 	)

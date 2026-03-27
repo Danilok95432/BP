@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
 
 import cn from 'classnames'
-import { SeparatorIconSVG } from 'src/shared/ui/icons/separatorIconSVG'
+// import { SeparatorIconSVG } from 'src/shared/ui/icons/separatorIconSVG'
 
 export const MainNavigation = () => {
 	const location = useLocation()
@@ -37,14 +37,14 @@ export const MainNavigation = () => {
 						</button>
 					))}
 				</ul>
-				<button
+				{/* <button
 					className={styles.personMenu}
 					aria-label='Лаборатория Доуэля'
 					title='Лаборатория Доуэля'
 				>
 					<SeparatorIconSVG />
 					<p>Лаборатория Доуэля</p>
-				</button>
+				</button> */}
 			</Container>
 		</nav>
 	)
