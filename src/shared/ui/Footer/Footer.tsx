@@ -56,10 +56,15 @@ export const Footer = () => {
 						</FlexRow>
 						<FlexRow className={styles.author}>
 							<p className={styles.title}>
-								© Беляевская премия, 2026
+								©{' '}
+								{settingsData?.copyright ??
+									'Международная литературная премия имени Александра Беляева, 2026'}
 								<br />
-								Международная литературная премия имени Александра Беляева. Портал разработан НПО
-								ТАУ на платформе ТАУ-6
+								Портал разработан{' '}
+								<a href='https://npotau.ru' target='_blank' rel='noreferrer'>
+									НПО ТАУ
+								</a>{' '}
+								на платформе ТАУ-6
 							</p>
 						</FlexRow>
 					</FlexRow>

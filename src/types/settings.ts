@@ -14,4 +14,5 @@ export type SiteSettings = {
 	email: string
 	vk: string
 	title: string
+	copyright: string
 }
