@@ -2,8 +2,6 @@ import { useEffect, useState, type FC } from 'react'
 import { Helmet } from 'react-helmet-async'
 
 import styles from './index.module.scss'
-import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
-import { TgEventIconSVG } from 'src/shared/ui/icons/tgEventIconSVG'
 import { type ImageItemWithText } from 'src/types/photos'
 import { useGetPageHeaderQuery } from 'src/features/pages-header/api/pages-header.api'
 import { GalleryImg } from 'src/widgets/gallery-img/gallery-img'
@@ -71,7 +69,7 @@ export const AboutHistory: FC = () => {
 				</div> */}
 				{/* <HistorySection noTitle className={styles.historySection} /> */}
 
-				<FlexRow className={styles.contactsRow}>
+				{/* <FlexRow className={styles.contactsRow}>
 					<h3>Контакты Оргкомитета Беляевской премии</h3>
 					<FlexRow className={styles.wrapper}>
 						<FlexRow className={styles.iconWrapper}>
@@ -80,7 +78,7 @@ export const AboutHistory: FC = () => {
 						</FlexRow>
 						<p>belyaevprize@gmail.com</p>
 					</FlexRow>
-				</FlexRow>
+				</FlexRow> */}
 			</div>
 		</div>
 	)

@@ -12,8 +12,10 @@ import logoMobile from 'src/assets/img/logo-mobile-bp.png'
 
 // import cn from 'classnames'
 import { BurgerMenu } from 'src/widgets/main-navigation/components/burger-menu/burger-menu'
+import { useGetSettingsSiteQuery } from 'src/features/home/api/home.api'
 
 export const Header = () => {
+	const { data: settingsData } = useGetSettingsSiteQuery(null)
 	const breakpoint = useBreakPoint()
 	const [isSmallScreen, setIsSmallScreen] = useState(false)
 
@@ -35,7 +37,10 @@ export const Header = () => {
 					<FlexRow className={styles.logoRow}>
 						<Link to={'/'} aria-label='Главная' title='Главная' className={styles.logoWrap}>
 							{breakpoint === 'S' ? <img src={logoMobile} /> : <img src={logo} />}
-							<p>Международная литературная премия имени Александра Беляева</p>
+							<p>
+								{settingsData?.title ??
+									'Международная литературная премия имени Александра Беляева'}
+							</p>
 						</Link>
 					</FlexRow>
 					<FlexRow className={styles.controlsRow}>
