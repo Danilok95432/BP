@@ -9,6 +9,20 @@ import { useGetPageHeaderQuery } from 'src/features/pages-header/api/pages-heade
 
 export const FondDocs: FC = () => {
 	const { data: aboutPageData } = useGetPageHeaderQuery('fond')
+	const handleDownload = async (url: string, filename: string) => {
+		const response = await fetch(url)
+		const blob = await response.blob()
+		const blobUrl = window.URL.createObjectURL(blob)
+
+		const link = document.createElement('a')
+		link.href = blobUrl
+		link.download = filename
+		document.body.appendChild(link)
+		link.click()
+		link.remove()
+
+		window.URL.revokeObjectURL(blobUrl)
+	}
 	return (
 		<div className={styles.aboutGeneralPage}>
 			<Helmet>
@@ -23,10 +37,7 @@ export const FondDocs: FC = () => {
 							<a
 								key={doc.id}
 								className={styles.doc}
-								href={doc.url}
-								download={doc.url}
-								target='_blank'
-								rel='noreferrer'
+								onClick={async () => await handleDownload(doc.url, doc.name)}
 							>
 								<div className={styles.file}>
 									{doc.name.split('.')[doc.name.split('.').length - 1] === 'pdf' ? (

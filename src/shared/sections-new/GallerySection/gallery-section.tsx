@@ -12,8 +12,8 @@ import type { Swiper as SwiperType } from 'swiper'
 import { type ImageItemWithText } from 'src/types/photos'
 import { CloseSvg } from 'src/shared/ui/icons/closeSVG'
 import classNames from 'classnames'
-import 'swiper/css'
-import 'swiper/css/pagination'
+// import 'swiper/css'
+// import 'swiper/css/pagination'
 import { eventsSliderFullScreenOptions, eventsSliderOptions } from './consts'
 
 export const GallerySection: FC<{ classNameSection?: string; photos?: ImageItemWithText[] }> = ({
