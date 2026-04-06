@@ -10,6 +10,7 @@ export type EventDocumentItem = {
 	id: string
 	name: string
 	url: string
+	size: string
 }
 
 export type EventPartnerItem = {

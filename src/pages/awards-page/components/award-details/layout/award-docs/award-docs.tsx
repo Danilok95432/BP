@@ -24,14 +24,7 @@ export const AwardDocs: FC = () => {
 				<FlexRow className={styles.docsList}>
 					{eventData?.documents?.map((doc) => {
 						return (
-							<a
-								key={doc.id}
-								className={styles.doc}
-								href={doc.url}
-								download={doc.url}
-								target='_blank'
-								rel='noreferrer'
-							>
+							<a key={doc.id} className={styles.doc} href={doc.url} download>
 								<div className={styles.file}>
 									{doc.name.split('.')[doc.name.split('.').length - 1] === 'pdf' ? (
 										<PDFFileIconSVG />
@@ -41,7 +34,7 @@ export const AwardDocs: FC = () => {
 								</div>
 								<FlexRow className={styles.info}>
 									<p className={styles.title}>{doc.name.split('.')[0]}</p>
-									<p>{'68,5 КВ'}</p>
+									<p>{`${(Number(doc.size) / 1024).toFixed(1)} КВ`}</p>
 								</FlexRow>
 							</a>
 						)
