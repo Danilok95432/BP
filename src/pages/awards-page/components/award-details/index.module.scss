@@ -4,6 +4,10 @@
   }
 }
 
+.aboutLayout {
+  flex: 1;
+}
+
 .noBottom {
   @media (max-width: 768px) {
     padding-bottom: 0;

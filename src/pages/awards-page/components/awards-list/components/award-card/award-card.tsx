@@ -6,17 +6,10 @@ import { SeparatorIconNavigationSVG } from 'src/shared/ui/icons/separatorIconNav
 import { mainFormatDate } from 'src/shared/helpers/utils'
 
 import bgHover from 'src/assets/img/bg-award-hover.png'
-
-interface IAwardCard {
-	id: string
-	title: string
-	status: string
-	requests?: number
-	dateTo?: string
-}
+import { type CardEventItem } from 'src/types/event'
 
 type AwardCardProps = {
-	award: IAwardCard
+	award: CardEventItem
 }
 
 export const AwardCard: FC<AwardCardProps> = ({ award }) => {
@@ -33,11 +26,17 @@ export const AwardCard: FC<AwardCardProps> = ({ award }) => {
 				<h2 className={styles.title}>{award.title}</h2>
 				<FlexRow className={styles.infoWrapper}>
 					<FlexRow className={styles.topBlock}>
-						<p>{'Статус неизвестен'}</p>
+						<p>
+							{award.status === 'current'
+								? 'Идет сейчас'
+								: award.status === 'finished'
+									? 'Конкурс завершен'
+									: 'Статус неизвестен'}
+						</p>
 						<SeparatorIconNavigationSVG color={isHovered ? 'white' : 'black'} />
-						<p>{`Подано ${award.requests ?? 'неизвестное количество'} заявок`}</p>
+						<p>{`Подано ${award.count_requests ?? 'неизвестное количество'} заявок`}</p>
 					</FlexRow>
-					<p>{`Прием заявок до ${mainFormatDate(award.dateTo) === null ? 'неизвестной даты' : mainFormatDate(award.dateTo)}`}</p>
+					<p>{`Прием заявок до ${mainFormatDate(award?.date && award?.date.length > 1 ? award.date[1] : '') === null ? 'неизвестной даты' : mainFormatDate(award?.date && award?.date.length > 1 ? award.date[1] : '')}`}</p>
 				</FlexRow>
 			</FlexRow>
 		</Link>

@@ -15,14 +15,17 @@ export const Belyaev: FC = () => {
 	const [allPagePhoto, setAllPagePhoto] = useState<ImageItemWithText[]>([])
 
 	useEffect(() => {
-		const images: ImageItemWithText[] = []
-
-		if (aboutPageData?.page.mainphoto[0]) {
-			images.push(aboutPageData?.page.mainphoto[0])
+		if (aboutPageData) {
+			const images: ImageItemWithText[] = []
+			if (aboutPageData?.page.mainphoto) {
+				images.push(aboutPageData?.page.mainphoto[0])
+			}
+			if (aboutPageData?.page.photoGallery && Array.isArray(aboutPageData?.page.photoGallery)) {
+				images.push(...aboutPageData?.page.photoGallery)
+			}
+			setAllPagePhoto(images)
 		}
-
-		setAllPagePhoto(images)
-	}, [aboutPageData, location.pathname])
+	}, [aboutPageData])
 	return (
 		<div className={styles.awardGeneralPage}>
 			<Helmet>
@@ -42,12 +45,28 @@ export const Belyaev: FC = () => {
 						</FlexRow>
 					</FlexRow>
 					<div className={styles.imgWrapper}>
-						<img className={styles.posterImg} src={skeleton} alt='' />
+						<img
+							className={styles.posterImg}
+							src={
+								aboutPageData?.page && aboutPageData?.page.mainphoto.length > 0
+									? aboutPageData?.page.mainphoto[0].original
+									: skeleton
+							}
+							alt=''
+						/>
 					</div>
 				</FlexRow>
 			</FlexRow>
 			<div className={styles.inner}>
-				<GalleryImg allPageImages={allPagePhoto} className={styles.gallery} />
+				<GalleryImg
+					className={styles.gallery}
+					sliderClassname={styles.slider}
+					images={aboutPageData?.page?.photoGallery}
+					limit={12}
+					limitController
+					variant='slider'
+					allPageImages={allPagePhoto}
+				/>
 				{aboutPageData?.page.full2 && (
 					<div
 						className={styles.mainDescs}

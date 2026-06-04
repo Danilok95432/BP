@@ -36,7 +36,7 @@ export const FondCredits: FC = () => {
 					)}
 					{data?.fioDir && (
 						<FlexRow className={styles.creditItem}>
-							<p className={styles.title}>ФИО руководителя</p>
+							<p className={styles.title}>Директор фонда</p>
 							<p className={styles.credit}>{data?.fioDir}</p>
 						</FlexRow>
 					)}

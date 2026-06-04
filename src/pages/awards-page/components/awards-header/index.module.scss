@@ -1,7 +1,12 @@
+section.cont {
+  padding: 0!important;
+}
+
 div.awardsLayoutHeaderPageContent {
   display: flex;
   flex-direction: row;
   gap: 35px;
+  justify-content: space-between;
   padding-bottom: 30px;
   margin-bottom: 30px;
   border-bottom: 5px solid #F2F5F8;
@@ -31,15 +36,16 @@ div.awardsLayoutHeaderPageContent {
     }
   }
   .rightSideHeader {
-    width: 322px;
-    min-width: 322px;
-    height: 214px;
+    width: 200px;
+    min-width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
     img {
       width: 100%;
-      height: 100%;
+      height: 200px;
       aspect-ratio: 3 / 2;
       object-fit: cover;
-      border-radius: 5px;
     }
     @media (max-width: 768px) {
       display: none;

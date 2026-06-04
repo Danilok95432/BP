@@ -5,7 +5,6 @@ import cn from 'classnames'
 import styles from './index.module.scss'
 import { EventStatus } from '../event-status/event-status'
 import { type CardEventItem } from 'src/types/event'
-import { getDayOfWeek, mainFormatDate, parseTimeFromDate } from 'src/shared/helpers/utils'
 
 type EventItemProps = {
 	className?: string
@@ -54,12 +53,6 @@ export const EventCard: FC<EventItemProps> = ({
 				<figcaption className={cn(styles.eventContent, 'event-card-content')}>
 					<h3 className={styles.eventTitle}>{title}</h3>
 					<EventStatus className={styles.status} statusCode={status} />
-					<p className={styles.eventDate}>
-						{date ? `${mainFormatDate(date)}, ${getDayOfWeek(date)}` : 'Нет даты'}
-					</p>
-					<p className={styles.eventTime}>
-						{date ? `Начало в ${parseTimeFromDate(date)}` : 'Нет информации о времени начала'}
-					</p>
 					<p className={styles.eventLocations}>
 						<span>
 							{locTitle}

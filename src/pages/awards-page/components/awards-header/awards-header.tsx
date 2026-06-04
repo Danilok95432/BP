@@ -37,7 +37,7 @@ export const AwardsHeader = () => {
 		setAllPagePhoto(images)
 	}, [aboutPageData, location.pathname])
 	return (
-		<Section>
+		<Section className={styles.cont}>
 			<Container>
 				<div className={styles.awardsLayoutHeaderPageContent}>
 					<div className={styles.leftSideHeader}>
@@ -55,7 +55,7 @@ export const AwardsHeader = () => {
 						</div>
 					</div>
 					<div className={styles.rightSideHeader}>
-						<GalleryImg allPageImages={allPagePhoto} variant='newsMain' />
+						<GalleryImg images={allPagePhoto} variant='newsMain' />
 					</div>
 				</div>
 			</Container>

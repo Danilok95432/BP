@@ -50,6 +50,7 @@ export const LaureatDetails = () => {
 			<h2 className={styles.title}>О лауреате</h2>
 			<GalleryImg
 				className={laureatStyles.galleryPhotos}
+				sliderClassname={laureatStyles.slider}
 				images={laureatInfo?.laureats?.photos}
 				limit={12}
 				limitController

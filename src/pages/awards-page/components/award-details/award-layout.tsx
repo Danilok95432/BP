@@ -25,7 +25,7 @@ export const AwardLayout: FC = () => {
 	const isTraditionPage = getCurrentLocation()
 	const breakPoint = useBreakPoint()
 	return (
-		<div className={styles.aboutLayout}>
+		<div className={styles.aboutLayout} id='about'>
 			<Container className={classNames(styles.aboutContainerLayout, styles.noBottom)}>
 				{!isTraditionPage && <>{<AwardHeader />}</>}
 			</Container>

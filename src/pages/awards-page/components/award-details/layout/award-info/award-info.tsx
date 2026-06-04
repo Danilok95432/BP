@@ -32,7 +32,12 @@ export const AwardInfo: FC = () => {
 
 			<div className={styles.inner}>
 				<h2>Подробно о номинации</h2>
-				<GalleryImg allPageImages={allPagePhoto} className={styles.gallery} />
+				<GalleryImg
+					variant='slider'
+					allPageImages={allPagePhoto}
+					className={styles.gallery}
+					sliderClassname={styles.slider}
+				/>
 				{eventData?.descs && (
 					<div className={styles.mainDescs} dangerouslySetInnerHTML={{ __html: eventData.descs }} />
 				)}

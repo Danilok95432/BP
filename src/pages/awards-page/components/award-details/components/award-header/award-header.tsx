@@ -25,15 +25,9 @@ export const AwardHeader: FC = () => {
 		}
 
 		setAllPagePhoto(images)
-	}, [location.pathname])
+	}, [location.pathname, eventData])
 	const { openModal } = useActions()
 
-	const nominationData = {
-		title: '',
-		desc: 'Полное название номинации: «За литературную критику в области научно-художественной литературы». Рассматриваются произведения или серии работ общим объемом не более одного авторского листа.',
-		opened: true,
-		dateList: '2026-03-02T23:59:59.999Z',
-	}
 	const breakPoint = useBreakPoint()
 	return (
 		<div className={styles.awardLayoutHeaderPageContent}>
@@ -50,18 +44,23 @@ export const AwardHeader: FC = () => {
 						<span className={styles.blockquoteCaption}>{aboutPageData.caption}</span>
 					)} */}
 				</div>
-				{nominationData.opened ? (
+				{eventData?.event_type_name === 'открытая' ? (
 					<FlexRow className={styles.openedRow}>
 						<MainButton
 							className={styles.requestBtn}
 							onClick={() => openModal(<BuyTicketModal id='1' />)}
+							disabled={eventData?.status === 'finished'}
 						>
 							Подать заявку на участие
 						</MainButton>
 						<p>
 							{`До окончания приема заявок `}
 							{breakPoint === 'S' && <br />}
-							<span>{formatTimeLeft(nominationData.dateList)}</span>
+							<span>
+								{formatTimeLeft(
+									eventData?.date && eventData?.date.length > 1 ? String(eventData.date[1]) : '',
+								)}
+							</span>
 						</p>
 					</FlexRow>
 				) : (
@@ -71,7 +70,11 @@ export const AwardHeader: FC = () => {
 						</p>
 						<p className={styles.desc}>
 							{`Список участников будет полностью сформирован через `}
-							<span>{formatTimeLeft(nominationData.dateList)}</span>
+							<span>
+								{formatTimeLeft(
+									eventData?.date && eventData?.date.length > 1 ? String(eventData.date[1]) : '',
+								)}
+							</span>
 						</p>
 					</FlexRow>
 				)}

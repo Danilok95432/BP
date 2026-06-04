@@ -30,7 +30,12 @@ export const AboutHistory: FC = () => {
 
 			<div className={styles.inner}>
 				<h2>Детали и история</h2>
-				<GalleryImg allPageImages={allPagePhoto} className={styles.gallery} />
+				<GalleryImg
+					variant='slider'
+					allPageImages={allPagePhoto}
+					className={styles.gallery}
+					sliderClassname={styles.slider}
+				/>
 				{aboutPageData?.page.full2 && (
 					<div
 						className={styles.mainDescs}

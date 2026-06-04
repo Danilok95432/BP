@@ -150,7 +150,8 @@ export type CardEventItem = {
 	title: string
 	status: 'cancel' | 'current' | 'future' | 'finished'
 	category: CategoryFilterItem
-	date: Date
+	date: [string, string]
+	count_requests: string
 	location: {
 		title: string
 		address: string
