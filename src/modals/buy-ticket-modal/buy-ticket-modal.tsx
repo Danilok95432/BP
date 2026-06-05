@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { FormProvider, type SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -6,20 +5,15 @@ import type * as yup from 'yup'
 
 import styles from './index.module.scss'
 import { type FC, useEffect, useRef, useState } from 'react'
-import cn from 'classnames'
 import { toast } from 'react-toastify'
 import {
-	useGetCityByRegionQuery,
-	useGetInfoRegistationQuery,
-	useGetRegionsByValueQuery,
-	useSendRegistrationFormMutation,
-} from 'src/features/auth/api/auth.api'
-import { useGetEventByIdQuery } from 'src/features/home/api/home.api'
-import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
-import { booleanToNumberString } from 'src/shared/helpers/utils'
+	useCheckEmailCodeMutation,
+	useGetListsForRequestQuery,
+	useSaveRequestMutation,
+	useSendEmailCodeMutation,
+} from 'src/features/home/api/home.api'
 import { MainButton } from 'src/shared/ui/MainButton/MainButton'
 import { useActions } from 'src/app/store/hooks/actions'
-import { useLocation } from 'react-router-dom'
 import { type RegInputs, regSchema } from './schema'
 import { HeadSection } from './components/head-section/head-section'
 import { RegSection } from './components/reg-section/reg-section'
@@ -28,191 +22,130 @@ type RegEventPartModalProps = {
 	id: string
 }
 
+type SaveRequestResponse = {
+	data?: {
+		status?: string
+		errortext?: string
+	}
+	error?: unknown
+}
+
+const getSelectValue = (value: RegInputs['form'] | RegInputs['genre']) => {
+	if (typeof value === 'string') return value
+
+	return String(value.value)
+}
+
 export const BuyTicketModal: FC<RegEventPartModalProps> = ({ id }) => {
 	const { closeModal } = useActions()
 	const modalRef = useRef<HTMLDivElement>(null)
-	const { data: eventDataInfo } = useGetEventByIdQuery('1')
-	const { data: selectOptions } = useGetInfoRegistationQuery('1')
-	const { data: regions } = useGetRegionsByValueQuery('')
-	const [saveRegForm] = useSendRegistrationFormMutation()
+	const { data: lists } = useGetListsForRequestQuery(null)
 	const [isCodeAccepted, setIsCodeAccepted] = useState(false)
 	const [errorForm, setErrorForm] = useState<string>('')
-	const breakPoint = useBreakPoint()
 
-	const location = useLocation()
+	const [sendCodeReq] = useSendEmailCodeMutation()
+	const [checkCode] = useCheckEmailCodeMutation()
+	const [saveReq, { isLoading: isSaveLoading }] = useSaveRequestMutation()
 
 	const methods = useForm<RegInputs>({
 		mode: 'onBlur',
 		resolver: yupResolver(regSchema as unknown as yup.ObjectSchema<RegInputs>),
 		defaultValues: {
-			group_list: [{ age: '', surname: '', firstname: '', fathname: '' }],
+			surname: '',
+			firstname: '',
+			fathname: '',
+			birthdate: '',
+			psevdoname: '',
+			place: '',
+			email: '',
+			phone: '',
+			code: '',
+			workname: '',
+			form: '',
+			genre: '',
+			annotation: '',
+			url: '',
+			itemfile: null,
 		},
 	})
 
-	const {
-		formState: { errors },
-	} = methods
+	const emailValue = useWatch({ control: methods.control, name: 'email' })
+	const prevEmailRef = useRef<string | undefined>(undefined)
 
-	const useGroup = useWatch({ control: methods.control, name: 'use_group' })
-	const useSportsmen = useWatch({ control: methods.control, name: 'use_sportsmen' })
-	const useFolk = useWatch({ control: methods.control, name: 'use_folk' })
-	const useMaster = useWatch({ control: methods.control, name: 'use_master' })
-	const useTrader = useWatch({ control: methods.control, name: 'use_trader' })
-	const useOrg = useWatch({ control: methods.control, name: 'use_org' })
-	const useVolunteer = useWatch({ control: methods.control, name: 'use_volunteer' })
-	const useJournalist = useWatch({ control: methods.control, name: 'use_journalist' })
+	useEffect(() => {
+		if (prevEmailRef.current === undefined) {
+			prevEmailRef.current = emailValue
+			return
+		}
 
-	const useFlags = [
-		useGroup,
-		useSportsmen,
-		useFolk,
-		useMaster,
-		useTrader,
-		useOrg,
-		useVolunteer,
-		useJournalist,
-	]
+		if (prevEmailRef.current === emailValue) return
 
-	const [lockSearch, setLockSearch] = useState<boolean>(false)
-
-	const regionValue = useWatch({
-		control: methods.control,
-		name: 'id_region',
-	})
-
-	const cityValue =
-		useWatch({
-			control: methods.control,
-			name: 'id_city',
-		}) || ''
-
-	const regionId = regions?.regions?.find((reg) => reg.label === regionValue)?.value
-
-	const { data: citys } = useGetCityByRegionQuery(
-		{
-			region: regionId ?? '',
-			city: cityValue,
-		},
-		{
-			skip: !regionId || cityValue.length <= 2 || lockSearch,
-		},
-	)
+		prevEmailRef.current = emailValue
+		setErrorForm('')
+		setIsCodeAccepted(false)
+		methods.setValue('code', '', { shouldDirty: true, shouldValidate: true })
+	}, [emailValue, methods])
 
 	const onSubmit: SubmitHandler<RegInputs> = async (data) => {
-		const region = regions?.regions?.filter((reg) => reg.label === data.id_region)[0].value
-		const city = citys?.citys?.filter((nas) => nas.label === data.id_city)[0].value
-		let selectedObjSubEvents = ''
-
-		if (data.use_group && typeof data.sub_events_group === 'string') {
-			selectedObjSubEvents = data.sub_events_group
-		} else {
-			const etno = typeof data.sub_events_etno === 'string' ? data.sub_events_etno.split(',') : []
-			const fun = Array.isArray(data.sub_events_fun)
-				? data.sub_events_fun.filter(Boolean)
-				: typeof data.sub_events_fun === 'string'
-					? data.sub_events_fun.split(',')
-					: []
-
-			selectedObjSubEvents = [...etno, ...fun].join(',')
+		if (!isCodeAccepted) {
+			methods.setError('code', {
+				type: 'manual',
+				message: 'Подтвердите электронную почту проверочным кодом',
+			})
+			setErrorForm('Подтвердите электронную почту проверочным кодом')
+			return
 		}
+
 		const formData = new FormData()
-		formData.append('id_reg_type', '1')
-		formData.append('id_event', id)
 		formData.append('surname', data.surname)
 		formData.append('firstname', data.firstname)
-		formData.append('fathname', data.fathname ?? '')
-		formData.append('birthdate', data.birthdate ?? '')
-		formData.append('id_region', region ?? '')
-		formData.append('id_city', city ?? '')
+		formData.append('fathname', data.fathname)
+		formData.append('birthdate', data.birthdate)
+		formData.append('psevdoname', data.psevdoname ?? '')
+		formData.append('workname', data.workname)
+		formData.append('id_form', getSelectValue(data.form))
+		formData.append('id_zhanr', getSelectValue(data.genre))
+		formData.append('place', data.place)
 		formData.append('phone', data.phone)
-		formData.append('email', data.email ?? '')
+		formData.append('email', data.email)
+		formData.append('code', data.code)
+		formData.append('annotation', data.annotation)
+		if (data.url) formData.append('url', data.url)
+		if (data.itemfile) formData.append('itemfile', data.itemfile)
 
-		// Групповые данные
-		formData.append('use_group', booleanToNumberString(data.use_group))
-		formData.append('group_name', data.group_name ?? '')
-		formData.append('id_event_role', data.id_event_role ?? '')
-		formData.append('group_count', data.group_list?.length.toString() ?? '0')
-
-		// Данные участников группы
-		data.group_list?.forEach((group, index) => {
-			formData.append(`group_list_age[${index}]`, group.age ?? '')
-			formData.append(`group_list_surname[${index}]`, group.surname ?? '')
-			formData.append(`group_list_firstname[${index}]`, group.firstname ?? '')
-			formData.append(`group_list_fathname[${index}]`, group.fathname ?? '')
-		})
-
-		// Данные лагеря
-		formData.append('use_lager', booleanToNumberString(data.use_lager))
-		formData.append('id_lager_type', data.id_lager_type ?? '')
-		formData.append('lager_count', data.lager_count?.toString() ?? '0')
-		formData.append('data_zaezd', data.data_zaezd ?? '')
-		formData.append('data_viezd', data.data_viezd ?? '')
-
-		// Данные спортсменов и активности
-		formData.append('use_sportsmen', booleanToNumberString(data.use_sportsmen))
-
-		// Специальные категории
-		formData.append('use_folk', booleanToNumberString(data.use_folk))
-		formData.append('use_trader', booleanToNumberString(data.use_trader))
-		formData.append(
-			'trader_name',
-			data.use_group ? (data.trader_name_group ?? '') : (data.trader_name ?? ''),
-		)
-		formData.append('use_master', booleanToNumberString(data.use_master))
-		formData.append('use_org', booleanToNumberString(data.use_org))
-		formData.append('use_volunteer', booleanToNumberString(data.use_volunteer))
-		formData.append(
-			'master_name',
-			data.use_group ? (data.master_name_group ?? '') : (data.master_name ?? ''),
-		)
-		formData.append('use_journalist', booleanToNumberString(data.use_journalist))
-		formData.append(
-			'journal_name',
-			data.use_group ? (data.journal_name_group ?? '') : (data.journal_name ?? ''),
-		)
-
-		formData.append('sub_events_list', selectedObjSubEvents)
-
-		// Данные транспорта
-		formData.append('use_car', booleanToNumberString(data.use_car))
-		formData.append('id_car_type', data.id_car_type ?? '')
-		formData.append('car_number', data.car_number ?? '')
 		try {
-			if (isCodeAccepted) {
-				if (city === '' || city === undefined) {
-					formData.append('city_name', data.id_city)
-				}
-				const res = (await saveRegForm(formData)) as unknown as {
-					data: { status: string; errortext: string; ticket_link?: string }
-				}
-				if (res.data.status === 'ok') {
-					toast.success('Регистрация прошла успешно!', {
-						position: 'bottom-right',
-						autoClose: 5000,
-						hideProgressBar: false,
-						closeOnClick: true,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-					})
-					if (location.pathname.includes('/terminal')) {
-						if (
-							res.data.ticket_link &&
-							res.data.ticket_link !== '' &&
-							res.data.ticket_link.startsWith('http')
-						) {
-							window.location.href = res.data.ticket_link
-						}
-					}
-					closeModal()
-				} else {
-					toast.error('Произошла ошибка при регистрации', {
-						position: 'bottom-right',
-					})
-					setErrorForm(res.data.errortext)
-				}
+			const res = (await saveReq(formData)) as SaveRequestResponse
+
+			if (res.error) {
+				toast.error('Произошла ошибка при подаче заявки', {
+					position: 'bottom-right',
+				})
+				return
 			}
+
+			if (res.data?.status === 'ok') {
+				toast.success('Подача заявки прошла успешно!', {
+					position: 'bottom-right',
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				})
+				closeModal()
+				return
+			}
+
+			const serverError = res.data?.errortext ?? 'Произошла ошибка при подаче заявки'
+			toast.error(serverError, {
+				position: 'bottom-right',
+			})
+			setErrorForm(serverError)
 		} catch (error) {
+			toast.error('Произошла ошибка при подаче заявки', {
+				position: 'bottom-right',
+			})
 			console.error('Unexpected error:', error)
 		}
 	}
@@ -254,10 +187,31 @@ export const BuyTicketModal: FC<RegEventPartModalProps> = ({ id }) => {
 							noValidate
 							className={styles.ticketForm}
 						>
-							<HeadSection />
-							<RegSection />
-							<MainButton type='submit' className={styles.submitBtn}>
-								Подать заявку
+							<HeadSection id={id} />
+							<RegSection
+								genres={lists?.zhanr}
+								forms={lists?.forms}
+								errorForm={errorForm}
+								setErrorForm={setErrorForm}
+								isCodeAccepted={isCodeAccepted}
+								setIsCodeAccepted={setIsCodeAccepted}
+								sendCodeReq={sendCodeReq}
+								checkCode={checkCode}
+							/>
+							<p className={styles.agreementText}>
+								Подавая заявку, я подтверждаю, что ознакомлен(а) с{' '}
+								<a
+									target='_blank'
+									rel='noopener noreferrer'
+									href={'https://pabapi.npotau.ru/uploads/catfiles/event/36_1780581992_924337.docx'}
+									download
+								>
+									правилами проведения номинации конкурса
+								</a>{' '}
+								и обязуюсь им следовать
+							</p>
+							<MainButton type='submit' className={styles.submitBtn} disabled={isSaveLoading}>
+								{isSaveLoading ? 'Отправка...' : 'Подать заявку'}
 							</MainButton>
 						</form>
 					</FormProvider>

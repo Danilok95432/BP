@@ -39,7 +39,7 @@ export const MainImgSection = () => {
 									<SeparatorIconSVG color='black' />
 									<SeparatorIconSVG className={styles.smallSvg} color='black' />
 								</div>
-								<p>Подать заявку (для авторов)</p>
+								<p>Авторам фантастики: подать заявку</p>
 							</MainButton>
 						)}
 					</FlexRow>

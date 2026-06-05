@@ -48,7 +48,7 @@ export const AwardHeader: FC = () => {
 					<FlexRow className={styles.openedRow}>
 						<MainButton
 							className={styles.requestBtn}
-							onClick={() => openModal(<BuyTicketModal id='1' />)}
+							onClick={() => openModal(<BuyTicketModal id={eventData?.id ?? ''} />)}
 							disabled={eventData?.status === 'finished'}
 						>
 							Подать заявку на участие

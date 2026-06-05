@@ -45,7 +45,7 @@ export const MaskedDateInput: FC<MaskedDateInputProps> = ({
 			style={{ margin }}
 		>
 			<label>
-				{label && <p>{label}</p>}
+				{label && <p className={cn({ [styles.active]: value })}>{label}</p>}
 				<IMaskInput
 					mask='d.m.Y'
 					blocks={{
@@ -70,7 +70,7 @@ export const MaskedDateInput: FC<MaskedDateInputProps> = ({
 					value={value || ''}
 					unmask={false}
 					placeholder={placeholder ?? 'дд.мм.гггг'}
-					className={styles.dateInput}
+					className={cn(styles.dateInput, { [styles.active]: value })}
 					{...inputProps}
 					inputRef={ref}
 					onAccept={(val) => {

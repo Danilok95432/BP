@@ -1,98 +1,95 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { type GuestCarsList, type GuestGroupList } from 'src/types/registration'
-import { type SubEventOptions } from 'src/types/select'
+import { type SelOption } from 'src/types/select'
 import * as yup from 'yup'
 
 export type RegInputs = {
 	surname: string
 	firstname: string
-	fathname?: string
-	age?: string
-	birthdate?: string
-	id_region: string
-	id_city: string
-	city_name?: string
+	fathname: string
+	birthdate: string
+	psevdoname?: string
+	place: string
 	email: string
 	phone: string
 	code: string
-	id_reg_type?: string
-	id_event?: string
-	use_group?: boolean
-	group_name?: string
-	id_group_type?: string
-	id_event_role?: string
-	group_count?: string
-	group_list?: GuestGroupList[] | null
-	sub_events_group?: SubEventOptions[] | string
-	sub_events_etno?: SubEventOptions[] | string
-	sub_events_fun?: SubEventOptions[] | string
-	use_org?: boolean
-	use_volunteer?: boolean
-	trader_name?: string
-	use_lager?: boolean
-	id_lager_type?: string
-	lager_count?: string
-	data_zaezd?: string
-	data_viezd?: string
-	use_sportsmen?: boolean
-	use_folk?: boolean
-	use_trader?: boolean
-	use_master?: boolean
-	master_name?: string
-	id_car_type?: string
-	car_number?: string
-	use_journalist?: boolean
-	journal_name?: string
-	use_car?: boolean
-	cars_count?: string
-	cars_list?: GuestCarsList[]
-	trader_name_group?: string
-	master_name_group?: string
-	journal_name_group?: string
+	workname: string
+	form: SelOption | string
+	genre: SelOption | string
+	annotation: string
+	url?: string
+	itemfile: File | null
 }
 
-const guestGroupItemSchema = yup.object().shape({
-	age: yup
-		.string()
-		.required('Возраст обязателен')
-		.matches(/^[0-9]+$/, 'Возраст должен содержать только цифры'),
+const requiredSelect = (message: string) =>
+	yup
+		.mixed<SelOption | string>()
+		.required(message)
+		.test('required-select', message, (value) => {
+			if (typeof value === 'string') return value.trim().length > 0
+			if (value && typeof value === 'object' && 'value' in value) {
+				return String(value.value ?? '').trim().length > 0
+			}
 
-	surname: yup
-		.string()
-		.required('Фамилия обязательна')
-		.matches(/^[а-яА-ЯёЁa-zA-Z\- ]+$/, 'Фамилия содержит недопустимые символы'),
+			return false
+		})
 
-	firstname: yup
-		.string()
-		.required('Имя обязательно')
-		.matches(/^[а-яА-ЯёЁa-zA-Z\- ]+$/, 'Имя содержит недопустимые символы'),
+const isRealDate = (value?: string) => {
+	if (!value) return false
 
-	fathname: yup
-		.string()
-		.notRequired()
-		.matches(/^[а-яА-ЯёЁa-zA-Z\- ]*$/, 'Отчество содержит недопустимые символы'),
-})
+	const [day, month, year] = value.split('.').map(Number)
+	const date = new Date(year, month - 1, day)
+	const today = new Date()
+	today.setHours(0, 0, 0, 0)
 
-export const groupListSchema = yup.array().of(guestGroupItemSchema).defined()
+	return (
+		date.getFullYear() === year &&
+		date.getMonth() === month - 1 &&
+		date.getDate() === day &&
+		date <= today
+	)
+}
+
+const isFile = (value: unknown) =>
+	(typeof File !== 'undefined' && value instanceof File) ||
+	(!!value && typeof value === 'object' && 'name' in value && 'size' in value)
 
 export const regSchema = yup.object().shape({
-	surname: yup.string().required('Введите фамилию'),
-	firstname: yup.string().required('Введите имя'),
-	code: yup.string().required('Введите верный код'),
-	id_region: yup
+	surname: yup.string().trim().required('Введите фамилию'),
+	firstname: yup.string().trim().required('Введите имя'),
+	fathname: yup.string().trim().required('Введите отчество'),
+	birthdate: yup
 		.string()
-		.required('Введите регион')
-		.test('contains-comma', 'Выберите регион из списка', (value) => {
-			return value === 'Иностранец' || value.includes(',')
+		.required('Введите дату рождения')
+		.matches(/^\d{2}\.\d{2}\.\d{4}$/, 'Введите дату в формате дд.мм.гггг')
+		.test('real-date', 'Введите корректную дату рождения', isRealDate),
+	psevdoname: yup.string().trim().notRequired(),
+	place: yup.string().trim().required('Введите название населенного пункта'),
+	email: yup.string().trim().required('Введите электронную почту').email('Введите верную почту'),
+	phone: yup
+		.string()
+		.required('Введите номер телефона')
+		.test('phone-length', 'Введите полный номер телефона', (value) => {
+			return (value ?? '').replace(/\D/g, '').length === 11
 		}),
-	id_city: yup.string().required('Введите название населенного пункта'),
-	email: yup.string().required('Введите электронную почту').email('Введите верную почту'),
-	phone: yup.string().required('Введите номер телефона').min(10, 'Недостаточно цифр в номере'),
-	use_group: yup.boolean(),
-	group_list: yup.lazy((_, context) => {
-		console.log(context.parent.use_group)
-		return context.parent.use_group === true
-			? groupListSchema.required('Добавьте хотя бы одного участника группы').defined()
-			: yup.mixed().notRequired()
-	}),
+	code: yup
+		.string()
+		.required('Введите проверочный код')
+		.matches(/^\d{5}$/, 'Введите 5 цифр проверочного кода'),
+	workname: yup.string().trim().required('Введите название работы'),
+	form: requiredSelect('Выберите форму'),
+	genre: requiredSelect('Выберите жанр'),
+	annotation: yup.string().trim().required('Введите краткую аннотацию'),
+	url: yup
+		.string()
+		.trim()
+		.notRequired()
+		.test('url', 'Введите корректную ссылку', (value) => {
+			if (!value) return true
+
+			return /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/.*)?$/i.test(value)
+		}),
+	itemfile: yup
+		.mixed<File>()
+		.required('Загрузите файл')
+		.test('file-required', 'Загрузите файл', isFile),
 })

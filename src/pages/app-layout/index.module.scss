@@ -1,3 +1,7 @@
 .main {
   flex: 1;
 }
+
+:global(.Toastify__toast-container) {
+	z-index: 999999 !important;
+}

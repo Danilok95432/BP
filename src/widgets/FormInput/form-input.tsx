@@ -19,6 +19,15 @@ import {
 } from 'src/features/auth/api/auth.api'
 import { MainButton } from 'src/shared/ui/MainButton/MainButton'
 
+export type CodeMutationTrigger = (body: FormData) => Promise<unknown>
+
+type MutationResponseData = {
+	status?: string
+	errortext?: string
+	ticket?: string
+	ticket_link?: string
+}
+
 interface CustomProps {
 	label: string
 	error?: string
@@ -33,8 +42,8 @@ interface CustomProps {
 	is_select?: boolean
 	is_city_select?: boolean
 	isCode?: boolean
-	isTextArea?: boolean // Новый флаг для textarea
-	heightTextArea?: string // Высота для textarea
+	isTextArea?: boolean
+	heightTextArea?: string
 	selectOptions?: SelOption[]
 	errorForm?: string
 	searchValue?: string
@@ -50,11 +59,42 @@ interface CustomProps {
 	setLockSearch?: (arg0: boolean) => void
 	sendCodeClass?: string
 	setTicketUrl?: (arg0: string) => void
+	sendCodeReq?: CodeMutationTrigger
+	checkCode?: CodeMutationTrigger
+	codeLength?: number
 }
 
 type TextInputProps = InputHTMLAttributes<HTMLInputElement> &
 	TextareaHTMLAttributes<HTMLTextAreaElement> &
 	CustomProps
+
+const getMutationData = (response: unknown): MutationResponseData | undefined => {
+	if (!response || typeof response !== 'object' || !('data' in response)) return undefined
+
+	return (response as { data?: MutationResponseData }).data
+}
+
+const hasMutationError = (response: unknown) => {
+	return !!response && typeof response === 'object' && 'error' in response
+}
+
+const isFilled = (value: unknown) => {
+	if (Array.isArray(value)) return value.length > 0
+	if (value && typeof value === 'object') {
+		const option = value as Partial<SelOption>
+		return Boolean(option.label ?? option.value)
+	}
+
+	return String(value ?? '').length > 0
+}
+
+const getSelectInputValue = (value: unknown) => {
+	if (value && typeof value === 'object' && !Array.isArray(value)) {
+		return String((value as Partial<SelOption>).label ?? '')
+	}
+
+	return String(value ?? '')
+}
 
 export const FormInput: React.FC<TextInputProps> = ({
 	label,
@@ -77,8 +117,8 @@ export const FormInput: React.FC<TextInputProps> = ({
 	name,
 	is_select,
 	is_city_select,
-	isTextArea = false, // Новый пропс с дефолтным значением
-	heightTextArea = '120px', // Дефолтная высота для textarea
+	isTextArea = false,
+	heightTextArea = '120px',
 	lockSearch,
 	setLockSearch,
 	selectOptions,
@@ -88,24 +128,82 @@ export const FormInput: React.FC<TextInputProps> = ({
 	setSearchValue,
 	sendCodeClass,
 	setTicketUrl,
+	sendCodeReq,
+	checkCode,
+	codeLength = 5,
 	...restProps
 }) => {
-	const { register, control, watch } = useFormContext()
+	const {
+		register,
+		control,
+		watch,
+		trigger,
+		setValue,
+		formState: { errors },
+	} = useFormContext()
 	const inputRef = useRef<HTMLInputElement>(null)
 	const textareaRef = useRef<HTMLTextAreaElement>(null)
+	const selectWrapperRef = useRef<HTMLDivElement>(null)
+	const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 	const [isFocused, setIsFocused] = useState(false)
 	const [isSended, setIsSended] = useState(false)
 	const [showOptions, setShowOptions] = useState(false)
+	const [forceShowAllOptions, setForceShowAllOptions] = useState(false)
+	const [codeStatus, setCodeStatus] = useState<'idle' | 'ok' | 'error'>('idle')
 	const fieldValue = watch(name)
-	const shouldRaiseLabel = isFocused || fieldValue?.length > 0
+	const shouldRaiseLabel = isFocused || isFilled(fieldValue)
+	const fieldError = error ?? (errors as Record<string, { message?: string }>)[name]?.message
 
 	const [getCode] = useGetRegistrationCodeMutation()
+	const [checkPhoneCode] = useCheckRegistrationCodeMutation()
 
 	const handleFocus = () => setIsFocused(true)
 	const handleBlur = () => setIsFocused(false)
 	const [countdown, setCountdown] = useState<number>(0)
 
-	const handleSendCode = async (phone: string) => {
+	useEffect(() => {
+		if (!is_select) return
+
+		const handleClickOutside = (event: MouseEvent) => {
+			if (selectWrapperRef.current && !selectWrapperRef.current.contains(event.target as Node)) {
+				setShowOptions(false)
+				setForceShowAllOptions(false)
+				setIsFocused(false)
+			}
+		}
+
+		document.addEventListener('mousedown', handleClickOutside)
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside)
+		}
+	}, [is_select])
+
+	useEffect(() => {
+		return () => {
+			if (timerRef.current) clearInterval(timerRef.current)
+		}
+	}, [])
+
+	const startCountdown = () => {
+		if (timerRef.current) clearInterval(timerRef.current)
+
+		setIsSended(true)
+		setCountdown(120)
+
+		timerRef.current = setInterval(() => {
+			setCountdown((prev) => {
+				if (prev <= 1) {
+					if (timerRef.current) clearInterval(timerRef.current)
+					setIsSended(false)
+					return 0
+				}
+
+				return prev - 1
+			})
+		}, 1000)
+	}
+
+	const handleSendPhoneCode = async (phone: string) => {
 		try {
 			const response = await getCode(phone)
 
@@ -119,22 +217,10 @@ export const FormInput: React.FC<TextInputProps> = ({
 			const { status, errortext, ticket } = response.data
 
 			if (status === 'ok') {
-				setIsSended(true)
+				startCountdown()
 				setIsCodeAccepted?.(false)
 				setTicketUrl?.(ticket ?? '')
 				setErrorForm?.('')
-				setCountdown(120)
-
-				const timer = setInterval(() => {
-					setCountdown((prev) => {
-						if (prev <= 1) {
-							clearInterval(timer)
-							setIsSended(false)
-							return 0
-						}
-						return prev - 1
-					})
-				}, 1000)
 			} else if (status === 'error') {
 				toast.error(errortext ?? 'Ошибка при отправке кода. Повторите попытку позже', {
 					position: 'bottom-right',
@@ -146,7 +232,68 @@ export const FormInput: React.FC<TextInputProps> = ({
 				position: 'bottom-right',
 				autoClose: 5000,
 			})
-			console.error('handleSendCode error:', error)
+			console.error('handleSendPhoneCode error:', error)
+		}
+	}
+
+	const handleSendEmailCode = async (email: string) => {
+		const isValidEmail = await trigger(name)
+		const normalizedEmail = email.trim()
+
+		if (!normalizedEmail || !isValidEmail) {
+			toast.error('Введите корректную электронную почту', {
+				position: 'bottom-right',
+				autoClose: 5000,
+			})
+			return
+		}
+
+		if (!sendCodeReq) {
+			toast.error('Не настроен запрос отправки кода', {
+				position: 'bottom-right',
+				autoClose: 5000,
+			})
+			return
+		}
+
+		const formData = new FormData()
+		formData.append('email', normalizedEmail)
+
+		try {
+			const response = await sendCodeReq(formData)
+			const data = getMutationData(response)
+
+			if (hasMutationError(response)) {
+				toast.error('Не удалось отправить код. Проверьте соединение.', {
+					position: 'bottom-right',
+					autoClose: 5000,
+				})
+				return
+			}
+
+			if (data?.status === 'ok') {
+				startCountdown()
+				setValue('code', '', { shouldDirty: true, shouldValidate: false })
+				setCodeStatus('idle')
+				setIsCodeAccepted?.(false)
+				setErrorForm?.('')
+				toast.success('Код отправлен на почту', {
+					position: 'bottom-right',
+					autoClose: 5000,
+				})
+				return
+			}
+
+			toast.error(data?.errortext ?? 'Ошибка при отправке кода. Повторите попытку позже', {
+				position: 'bottom-right',
+				autoClose: 5000,
+			})
+		} catch (error) {
+			toast.error('Неизвестная ошибка', {
+				position: 'bottom-right',
+				autoClose: 5000,
+			})
+			console.error('handleSendEmailCode error:', error)
 		}
 	}
 
@@ -157,40 +304,26 @@ export const FormInput: React.FC<TextInputProps> = ({
 					name={name}
 					control={control}
 					render={({ field }) => {
-						const wrapperRef = useRef<HTMLDivElement>(null)
-						const [forceShowAllOptions, setForceShowAllOptions] = useState(false)
-
-						useEffect(() => {
-							const handleClickOutside = (event: MouseEvent) => {
-								if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-									setShowOptions(false)
-									setForceShowAllOptions(false)
-								}
-							}
-							document.addEventListener('mousedown', handleClickOutside)
-							return () => {
-								document.removeEventListener('mousedown', handleClickOutside)
-							}
-						}, [])
-
+						const inputValue = getSelectInputValue(field.value)
 						const filteredOptions = forceShowAllOptions
 							? selectOptions
 							: selectOptions?.filter((opt) =>
-									opt.label.toLowerCase().includes((field.value || '').toLowerCase()),
+									opt.label.toLowerCase().includes(inputValue.toLowerCase()),
 								)
 
 						return (
 							<div
 								className={cn(styles.inputWrapper, {
 									[styles.focused]: isFocused,
-									[styles.error]: !!error,
+									[styles.error]: !!fieldError,
 									[styles.disabled]: disabled,
+									[styles.active]: isFilled(field.value),
 								})}
-								ref={wrapperRef}
+								ref={selectWrapperRef}
 							>
 								<input
-									className={styles.input}
-									value={field.value || ''}
+									className={cn(styles.input, { [styles.active]: isFilled(field.value) })}
+									value={inputValue}
 									disabled={disabled}
 									onChange={(e) => {
 										field.onChange(e.target.value)
@@ -209,7 +342,8 @@ export const FormInput: React.FC<TextInputProps> = ({
 								/>
 								<label
 									className={cn(styles.label, {
-										[styles.raised]: shouldRaiseLabel,
+										[styles.raised]: isFocused || isFilled(field.value),
+										[styles.active]: isFilled(field.value),
 									})}
 								>
 									{label}
@@ -221,7 +355,7 @@ export const FormInput: React.FC<TextInputProps> = ({
 												key={option.value}
 												className={styles.option}
 												onClick={() => {
-													field.onChange(option.label)
+													field.onChange(option)
 													setShowOptions(false)
 													setForceShowAllOptions(false)
 													if (is_city_select && setLockSearch) {
@@ -246,60 +380,101 @@ export const FormInput: React.FC<TextInputProps> = ({
 				name={name}
 				control={control}
 				render={({ field }) => {
-					const [status, setStatus] = useState<'idle' | 'ok' | 'error'>('idle')
-					const [checkPhoneCode] = useCheckRegistrationCodeMutation()
-
 					const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-						const rawValue = e.target.value.replace(/\D/g, '').slice(0, 5)
+						const rawValue = e.target.value.replace(/\D/g, '').slice(0, codeLength)
 						field.onChange(rawValue)
+						setErrorForm?.('')
 
-						if (rawValue.length === 5) {
-							try {
-								const res = await checkPhoneCode({ phone: watch('phone'), code: rawValue })
-								if ('data' in res && res.data?.status === 'ok') {
-									setStatus('ok')
-									setIsCodeAccepted?.(true)
-									setTicketUrl?.(res.data?.ticket_link ?? '')
-								} else {
-									setStatus('error')
-									setIsCodeAccepted?.(false)
-								}
-							} catch (err) {
-								setStatus('error')
+						if (rawValue.length !== codeLength) {
+							setCodeStatus('idle')
+							setIsCodeAccepted?.(false)
+							return
+						}
+
+						if (checkCode) {
+							const email = String(watch('email') ?? '').trim()
+							const isValidEmail = await trigger('email')
+
+							if (!email || !isValidEmail) {
+								setCodeStatus('error')
+								setIsCodeAccepted?.(false)
+								setErrorForm?.('Введите корректную электронную почту')
+								return
 							}
-						} else {
-							setStatus('idle')
+
+							const formData = new FormData()
+							formData.append('email', email)
+							formData.append('code', rawValue)
+
+							try {
+								const response = await checkCode(formData)
+								const data = getMutationData(response)
+
+								if (!hasMutationError(response) && data?.status === 'ok') {
+									setCodeStatus('ok')
+									setIsCodeAccepted?.(true)
+									setErrorForm?.('')
+									return
+								}
+
+								setCodeStatus('error')
+								setIsCodeAccepted?.(false)
+								setErrorForm?.(data?.errortext ?? 'Неверный код')
+							} catch (err) {
+								setCodeStatus('error')
+								setIsCodeAccepted?.(false)
+								setErrorForm?.('Не удалось проверить код')
+							}
+							return
+						}
+
+						try {
+							const res = await checkPhoneCode({ phone: watch('phone'), code: rawValue })
+							if ('data' in res && res.data?.status === 'ok') {
+								setCodeStatus('ok')
+								setIsCodeAccepted?.(true)
+								setTicketUrl?.(res.data?.ticket_link ?? '')
+							} else {
+								setCodeStatus('error')
+								setIsCodeAccepted?.(false)
+							}
+						} catch (err) {
+							setCodeStatus('error')
 						}
 					}
 
 					return (
-						<div
-							className={cn(styles.inputWrapper, {
-								[styles.focused]: isFocused,
-								[styles.error]: status === 'error',
-								[styles.accept]: status === 'ok',
-								[styles.disabled]: (disabled ?? isCodeAccepted) && errorForm === '',
-							})}
-						>
-							<input
-								type='text'
-								inputMode='numeric'
-								pattern='[0-9]*'
-								maxLength={5}
-								className={styles.input}
-								value={field.value || ''}
-								disabled={(disabled ?? isCodeAccepted) && errorForm === ''}
-								onChange={handleChange}
-								onFocus={() => setIsFocused(true)}
-								onBlur={() => setIsFocused(false)}
-							/>
-							<label
-								className={cn(styles.label, {
-									[styles.raised]: isFocused || !!field.value,
+						<div className={cn(styles.inputContainer, className)}>
+							<div
+								className={cn(styles.inputWrapper, {
+									[styles.focused]: isFocused,
+									[styles.error]: codeStatus === 'error' || !!fieldError,
+									[styles.accept]: codeStatus === 'ok',
+									[styles.disabled]: (disabled ?? isCodeAccepted) && errorForm === '',
+									[styles.active]: isFilled(field.value),
 								})}
 							>
-								{label}
-							</label>
+								<input
+									type='text'
+									inputMode='numeric'
+									pattern='[0-9]*'
+									maxLength={codeLength}
+									className={cn(styles.input, { [styles.active]: isFilled(field.value) })}
+									value={field.value || ''}
+									disabled={(disabled ?? isCodeAccepted) && errorForm === ''}
+									onChange={handleChange}
+									onFocus={() => setIsFocused(true)}
+									onBlur={() => setIsFocused(false)}
+								/>
+								<label
+									className={cn(styles.label, {
+										[styles.raised]: isFocused || !!field.value,
+										[styles.active]: isFilled(field.value),
+									})}
+								>
+									{label}
+								</label>
+							</div>
 						</div>
 					)
 				}}
@@ -313,9 +488,10 @@ export const FormInput: React.FC<TextInputProps> = ({
 				<div
 					className={cn(styles.inputWrapper, {
 						[styles.focused]: isFocused,
-						[styles.error]: !!error,
+						[styles.error]: !!fieldError,
 						[styles.disabled]: disabled,
-						[styles.accept]: accept,
+						[styles.accept]: accept ?? isCodeAccepted,
+						[styles.active]: isFilled(fieldValue),
 					})}
 				>
 					<Controller
@@ -324,45 +500,49 @@ export const FormInput: React.FC<TextInputProps> = ({
 						render={({ field }) => (
 							<>
 								<input
-									{...register(name)}
-									className={styles.input}
+									name={field.name}
+									value={field.value || ''}
+									className={cn(styles.input, { [styles.active]: isFilled(field.value) })}
 									disabled={disabled}
 									ref={(e) => {
-										register(name).ref(e)
+										field.ref(e)
 										;(inputRef as React.MutableRefObject<HTMLInputElement | null>).current = e
+									}}
+									onChange={(e) => {
+										field.onChange(e)
+										setValue('code', '', { shouldDirty: true, shouldValidate: false })
+										setCodeStatus('idle')
+										setIsCodeAccepted?.(false)
+										setErrorForm?.('')
 									}}
 									onFocus={handleFocus}
 									onBlur={handleBlur}
 								/>
-								{isEmailCode && (
-									<MainButton
-										className={cn(sendCodeClass, styles.sendCodeBtn, styles.sendCodeBtnEmail, {
-											[styles.resend]: countdown > 0 && !isCodeAccepted,
-											[styles.codeAccepted]: isCodeAccepted,
-										})}
-										onClick={async (e: { preventDefault: () => void }) => {
-											e.preventDefault()
-											await handleSendCode(fieldValue)
-										}}
-										disabled={
-											(!fieldValue || fieldValue.includes('_') || isSended) &&
-											countdown > 0 &&
-											!isCodeAccepted
-										}
-									>
-										{isCodeAccepted
-											? 'Код верный'
-											: countdown > 0
-												? `Повторная отправка: ${countdown}`
-												: 'Отправить код'}
-									</MainButton>
-								)}
+								<MainButton
+									className={cn(sendCodeClass, styles.sendCodeBtn, styles.sendCodeBtnEmail, {
+										[styles.resend]: countdown > 0 && !isCodeAccepted,
+										[styles.codeAccepted]: isCodeAccepted,
+										[styles.activeBtn]: isFilled(field.value),
+									})}
+									onClick={async (e: { preventDefault: () => void }) => {
+										e.preventDefault()
+										await handleSendEmailCode(String(field.value ?? ''))
+									}}
+									disabled={!field.value || isSended || countdown > 0 || isCodeAccepted}
+								>
+									{isCodeAccepted
+										? 'Код верный'
+										: countdown > 0
+											? `Код отправлен`
+											: 'Отправить код'}
+								</MainButton>
 							</>
 						)}
 					/>
 					<label
 						className={cn(styles.label, {
 							[styles.raised]: shouldRaiseLabel,
+							[styles.active]: isFilled(fieldValue),
 							[styles.smallLable]: isSmallLabel,
 						})}
 					>
@@ -378,10 +558,11 @@ export const FormInput: React.FC<TextInputProps> = ({
 			<div
 				className={cn(styles.inputWrapper, {
 					[styles.focused]: isFocused,
-					[styles.error]: !!error,
+					[styles.error]: !!fieldError,
 					[styles.disabled]: disabled,
 					[styles.accept]: accept,
-					[styles.textarea]: isTextArea, // Добавляем класс для textarea
+					[styles.textarea]: isTextArea,
+					[styles.active]: isFilled(fieldValue),
 				})}
 			>
 				{isPhone || isPhoneWithCode ? (
@@ -396,14 +577,19 @@ export const FormInput: React.FC<TextInputProps> = ({
 										field.ref(e)
 										;(inputRef as React.MutableRefObject<HTMLInputElement | null>).current = e
 									}}
-									value={field.value}
+									value={field.value ?? ''}
 									onChange={field.onChange}
 									onBlur={field.onBlur}
 									onFocus={() => {
 										handleFocus()
 									}}
 								>
-									<input className={styles.input} type='tel' ref={field.ref} {...restProps} />
+									<input
+										className={cn(styles.input, { [styles.active]: isFilled(fieldValue) })}
+										type='tel'
+										ref={field.ref}
+										{...restProps}
+									/>
 								</InputMask>
 								{isPhoneWithCode && (
 									<MainButton
@@ -413,12 +599,14 @@ export const FormInput: React.FC<TextInputProps> = ({
 										})}
 										onClick={async (e: { preventDefault: () => void }) => {
 											e.preventDefault()
-											await handleSendCode(fieldValue)
+											await handleSendPhoneCode(String(fieldValue ?? ''))
 										}}
 										disabled={
-											(!fieldValue || fieldValue.includes('_') || isSended) &&
-											countdown > 0 &&
-											!isCodeAccepted
+											!fieldValue ||
+											String(fieldValue).includes('_') ||
+											isSended ||
+											countdown > 0 ||
+											isCodeAccepted
 										}
 									>
 										{isCodeAccepted
@@ -432,12 +620,11 @@ export const FormInput: React.FC<TextInputProps> = ({
 						)}
 					/>
 				) : isTextArea ? (
-					// Рендерим textarea если флаг isTextArea активен
 					<textarea
 						{...register(name)}
-						className={styles.input}
+						className={cn(styles.input, { [styles.active]: isFilled(fieldValue) })}
 						disabled={disabled}
-						style={{ height: heightTextArea }} // Применяем высоту из пропса
+						style={{ height: heightTextArea }}
 						ref={(e) => {
 							register(name).ref(e)
 							;(textareaRef as React.MutableRefObject<HTMLTextAreaElement | null>).current = e
@@ -449,20 +636,22 @@ export const FormInput: React.FC<TextInputProps> = ({
 				) : (
 					<input
 						{...register(name)}
-						className={styles.input}
+						{...(restProps as InputHTMLAttributes<HTMLInputElement>)}
+						className={cn(styles.input, { [styles.active]: isFilled(fieldValue) })}
 						disabled={disabled}
+						type={isPassword ? 'password' : restProps.type}
 						ref={(e) => {
 							register(name).ref(e)
 							;(inputRef as React.MutableRefObject<HTMLInputElement | null>).current = e
 						}}
 						onFocus={handleFocus}
 						onBlur={handleBlur}
-						{...(restProps as InputHTMLAttributes<HTMLInputElement>)}
 					/>
 				)}
 				<label
 					className={cn(styles.label, {
 						[styles.raised]: shouldRaiseLabel,
+						[styles.active]: isFilled(fieldValue),
 						[styles.smallLable]: isSmallLabel,
 					})}
 				>

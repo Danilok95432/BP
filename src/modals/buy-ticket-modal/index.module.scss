@@ -64,6 +64,29 @@ div.ticketModal {
 				padding-top: 5px;
 			}
 		}
+		.agreementText {
+			font-size: 14px;
+			color: #fff;
+			margin-top: 26px;
+			a {
+				color: #fff;
+				text-decoration: underline;
+			}
+		}
+		.filesDrop {
+			display: flex;
+			justify-content: start;
+			align-items: center;
+			gap: 12px;
+			cursor: pointer;
+			.vector {
+				width: 24px;
+				height: 24px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		}
 		.formSection {
 			display: flex;
 			flex-direction: column;
@@ -103,7 +126,7 @@ div.ticketModal {
 			.groupInputs {
 				display: flex;
 				width: 100%;
-				align-items: center;
+				align-items: start;
 				flex-wrap: nowrap;
 				gap: 16px;
 				@media (max-width: 768px) {
@@ -262,15 +285,27 @@ div.ticketModal {
 					margin: 0 0 4px 0;
 				}
 				.warningMessage {
-					color: var(--main-theme-color);
+					color: #fff;
+					background: #d32f2f;
+					border-radius: 12px;
 					font-weight: 500;
 					font-size: 14px;
+					padding: 6px 12px;
 				}
 				span {
 					color: #ffffff80;
 					font-size: 14px;
 				}
 			}
+		}
+		.warningMessage {
+			color: #fff;
+			background: #d32f2f;
+			border-radius: 12px;
+			font-weight: 500;
+			font-size: 14px;
+			padding: 6px 12px;
+			max-width: max-content;
 		}
 		.formSectionReg {
 			gap: 24px;

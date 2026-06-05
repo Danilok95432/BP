@@ -31,15 +31,18 @@ export const AwardInfo: FC = () => {
 			</Helmet>
 
 			<div className={styles.inner}>
-				<h2>Подробно о номинации</h2>
+				<h2 className={styles.title}>Подробно о номинации</h2>
 				<GalleryImg
 					variant='slider'
 					allPageImages={allPagePhoto}
 					className={styles.gallery}
 					sliderClassname={styles.slider}
 				/>
-				{eventData?.descs && (
-					<div className={styles.mainDescs} dangerouslySetInnerHTML={{ __html: eventData.descs }} />
+				{eventData?.conditions && (
+					<div
+						className={styles.mainDescs}
+						dangerouslySetInnerHTML={{ __html: eventData.conditions }}
+					/>
 				)}
 			</div>
 		</div>

@@ -160,19 +160,19 @@ export const RegEventPartModal: FC<RegEventPartModalProps> = ({ id }) => {
 		formData.append('use_trader', booleanToNumberString(data.use_trader))
 		formData.append(
 			'trader_name',
-			data.use_group ? data.trader_name_group ?? '' : data.trader_name ?? '',
+			data.use_group ? (data.trader_name_group ?? '') : (data.trader_name ?? ''),
 		)
 		formData.append('use_master', booleanToNumberString(data.use_master))
 		formData.append('use_org', booleanToNumberString(data.use_org))
 		formData.append('use_volunteer', booleanToNumberString(data.use_volunteer))
 		formData.append(
 			'master_name',
-			data.use_group ? data.master_name_group ?? '' : data.master_name ?? '',
+			data.use_group ? (data.master_name_group ?? '') : (data.master_name ?? ''),
 		)
 		formData.append('use_journalist', booleanToNumberString(data.use_journalist))
 		formData.append(
 			'journal_name',
-			data.use_group ? data.journal_name_group ?? '' : data.journal_name ?? '',
+			data.use_group ? (data.journal_name_group ?? '') : (data.journal_name ?? ''),
 		)
 
 		formData.append('sub_events_list', selectedObjSubEvents)

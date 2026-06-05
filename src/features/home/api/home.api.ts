@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { type FieldValues } from 'react-hook-form'
 import { MAIN_PROD_URL, ReducerPath } from 'src/shared/helpers/consts'
 import {
 	type CardEventItem,
@@ -9,6 +11,7 @@ import {
 import { type FiltrationInfo } from 'src/types/global'
 import { type CardNewsItem } from 'src/types/news'
 import { type ProgramDay, type SubEventResponse } from 'src/types/program'
+import { type RequestListResponse } from 'src/types/requests'
 import { type SiteSettings } from 'src/types/settings'
 import { type VideoItem } from 'src/types/videos'
 
@@ -93,6 +96,32 @@ export const homeApi = createApi({
 				url: `settings/getinfo`,
 			}),
 		}),
+		getListsForRequest: build.query<RequestListResponse, null>({
+			query: () => ({
+				url: `request/get_list`,
+			}),
+		}),
+		sendEmailCode: build.mutation<void, FieldValues>({
+			query: (formData) => ({
+				url: 'request/send_code',
+				method: 'POST',
+				body: formData,
+			}),
+		}),
+		checkEmailCode: build.mutation<void, FieldValues>({
+			query: (formData) => ({
+				url: 'request/check_code',
+				method: 'POST',
+				body: formData,
+			}),
+		}),
+		saveRequest: build.mutation<void, FieldValues>({
+			query: (formData) => ({
+				url: 'request/save',
+				method: 'POST',
+				body: formData,
+			}),
+		}),
 	}),
 })
 
@@ -108,4 +137,8 @@ export const {
 	useGetFaqByIdQuery,
 	useGetCurrentEventIdQuery,
 	useGetSettingsSiteQuery,
+	useGetListsForRequestQuery,
+	useSendEmailCodeMutation,
+	useSaveRequestMutation,
+	useCheckEmailCodeMutation,
 } = homeApi

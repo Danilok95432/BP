@@ -1,14 +1,13 @@
 import { FlexRow } from 'src/shared/ui/FlexRow/FlexRow'
 import styles from '../../index.module.scss'
 import { type FC, useEffect, useRef } from 'react'
-import { FormInput } from 'src/widgets/FormInput/form-input'
+import { FormInput, type CodeMutationTrigger } from 'src/widgets/FormInput/form-input'
 import { MaskedDateInput } from 'src/widgets/masked-date-input/masked-date-input'
 import classNames from 'classnames'
 import { ErrorMessage } from '@hookform/error-message'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { type SelOption } from 'src/types/select'
-import { ReactDropzoneFiles } from 'src/widgets/reactDropzoneFiles/reactDropzoneFiles'
-import { AddButton } from 'src/shared/ui/AddButton/AddButton'
+import { FileUpload } from '../file-upload/file-upload'
 
 type RegSectionProps = {
 	errorForm?: string
@@ -19,6 +18,10 @@ type RegSectionProps = {
 	citys?: SelOption[]
 	lockSearch?: boolean
 	setLockSearch?: (arg0: boolean) => void
+	genres?: SelOption[]
+	forms?: SelOption[]
+	sendCodeReq?: CodeMutationTrigger
+	checkCode?: CodeMutationTrigger
 }
 
 export const RegSection: FC<RegSectionProps> = ({
@@ -30,18 +33,30 @@ export const RegSection: FC<RegSectionProps> = ({
 	citys = [{ label: '', value: '' }],
 	lockSearch,
 	setLockSearch,
+	genres = [{ label: '', value: '' }],
+	forms = [{ label: '', value: '' }],
+	sendCodeReq,
+	checkCode,
 }) => {
-	const phoneInputRef = useRef<HTMLInputElement>(null)
-	const codeInputRef = useRef<HTMLInputElement>(null)
+	const emailInputRef = useRef<HTMLDivElement>(null)
+	const codeInputRef = useRef<HTMLDivElement>(null)
 
 	const {
+		control,
 		formState: { errors },
 	} = useFormContext()
-	// const region = useWatch({ control, name: 'id_region' })
+
+	const useCode = useWatch({
+		control,
+		name: 'code',
+		defaultValue: false,
+	})
+
+	console.log(useCode)
 
 	useEffect(() => {
 		if (errorForm) {
-			const targetRef = isCodeAccepted ? phoneInputRef : codeInputRef
+			const targetRef = isCodeAccepted ? emailInputRef : codeInputRef
 
 			if (targetRef.current) {
 				targetRef.current.focus()
@@ -79,7 +94,7 @@ export const RegSection: FC<RegSectionProps> = ({
 			</FlexRow>
 			<div className={styles.inputwithLabel}>
 				<FormInput
-					name='author'
+					name='psevdoname'
 					label='Авторский псевдоним'
 					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
 				/>
@@ -87,28 +102,28 @@ export const RegSection: FC<RegSectionProps> = ({
 			</div>
 			<div className={styles.inputwithLabel}>
 				<FormInput
-					name='id_region'
+					name='place'
 					label='Откуда вы *'
-					className={styles.noMargin}
-					is_select
-					selectOptions={regions ?? [{ label: 'Не выбрано', value: '0' }]}
+					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
 				/>
-				{errors.id_region && (
+				{errors.place && (
 					<p className={styles.warningMessage}>
-						<ErrorMessage errors={errors} name={'id_region'} />
+						<ErrorMessage errors={errors} name='place' />
 					</p>
 				)}
 			</div>
 			<FlexRow className={styles.groupInputsStart}>
-				<div className={styles.inputwithLabel} ref={phoneInputRef}>
+				<div className={styles.inputwithLabel} ref={emailInputRef}>
 					<FormInput
 						name='email'
 						label='Адрес e-mail *'
-						isEmailCode={true}
+						isEmailCode
 						className={classNames(styles.noMargin, styles.first)}
 						isCodeAccepted={isCodeAccepted}
+						setIsCodeAccepted={setIsCodeAccepted}
+						setErrorForm={setErrorForm}
+						sendCodeReq={sendCodeReq}
 					/>
-					{errorForm && <p className={styles.warningMessage}>{errorForm}</p>}
 					<span className={styles.phoneSpan}>
 						На этот адрес поступят письма с проверочным кодом и ссылкой на билет
 					</span>
@@ -122,71 +137,89 @@ export const RegSection: FC<RegSectionProps> = ({
 						errorForm={errorForm}
 						setErrorForm={setErrorForm}
 						setIsCodeAccepted={setIsCodeAccepted}
+						checkCode={checkCode}
 						className={styles.noMargin}
 					/>
-					{!isCodeAccepted && errorForm && <p className={styles.warningMessage}>Неверный код</p>}
-					<span>Введите код для проверки</span>
+					{!isCodeAccepted && errorForm && <p className={styles.warningMessage}>{errorForm}</p>}
+					{(useCode === '' || !useCode) && !errors.code && <span>Введите код для проверки</span>}
 				</div>
 			</FlexRow>
-			<div className={styles.inputwithLabel} ref={phoneInputRef}>
+			<div className={styles.inputwithLabel}>
 				<FormInput
 					name='phone'
 					label='Номер телефона *'
 					isPhone
 					className={classNames(styles.noMargin, styles.first)}
-					isCodeAccepted={isCodeAccepted}
 				/>
-				{errorForm && <p className={styles.warningMessage}>{errorForm}</p>}
+				{errors.phone && (
+					<p className={styles.warningMessage}>
+						<ErrorMessage errors={errors} name='phone' />
+					</p>
+				)}
 			</div>
 			<span className={styles.sectionTitle}>Загрузка работы</span>
 			<div className={styles.inputwithLabel}>
 				<FormInput
-					name='nameWork'
+					name='workname'
 					label='Название работы *'
 					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
 				/>
+				{errors.workname && (
+					<p className={styles.warningMessage}>
+						<ErrorMessage errors={errors} name='workname' />
+					</p>
+				)}
 			</div>
 			<div className={styles.inputwithLabel}>
 				<FormInput
 					name='form'
 					label='Выбор формы *'
 					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
-					selectOptions={[{ label: '', value: '' }]}
+					selectOptions={forms ?? [{ label: '', value: '' }]}
 					is_select
 				/>
+				{errors.form && (
+					<p className={styles.warningMessage}>
+						<ErrorMessage errors={errors} name='form' />
+					</p>
+				)}
 			</div>
 			<div className={styles.inputwithLabel}>
 				<FormInput
 					name='genre'
-					label='Основной жанр'
+					label='Основной жанр *'
 					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
-					selectOptions={[{ label: '', value: '' }]}
+					selectOptions={genres ?? [{ label: '', value: '' }]}
 					is_select
 				/>
+				{errors.genre && (
+					<p className={styles.warningMessage}>
+						<ErrorMessage errors={errors} name='genre' />
+					</p>
+				)}
 			</div>
 			<div className={styles.inputwithLabel}>
 				<FormInput
-					name='short_annotation'
+					name='annotation'
 					label='Краткая аннотация *'
 					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
 					isTextArea
-					height='201px'
+					heightTextArea='201px'
 				/>
+				{errors.annotation && (
+					<p className={styles.warningMessage}>
+						<ErrorMessage errors={errors} name='annotation' />
+					</p>
+				)}
 			</div>
 			<div className={styles.inputwithLabel}>
 				<FormInput
-					name='link'
+					name='url'
 					label='Ссылка на электронную публикацию'
 					className={classNames(styles.inputWrapperContainer, styles.noMargin)}
 				/>
 			</div>
-			<ReactDropzoneFiles
-				className={styles.filesDrop}
-				name='files'
-				variant='text'
-				multiple
-				customUploadBtn={<AddButton>Загрузить работу</AddButton>}
-			/>
+			<FileUpload className={styles.filesDrop} name='itemfile' buttonText='Загрузить работу' />
 		</div>
 	)
 }
