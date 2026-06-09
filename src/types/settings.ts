@@ -15,4 +15,5 @@ export type SiteSettings = {
 	vk: string
 	title: string
 	copyright: string
+	metric: string
 }

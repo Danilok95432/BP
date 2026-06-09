@@ -572,7 +572,7 @@ export const FormInput: React.FC<TextInputProps> = ({
 						render={({ field }) => (
 							<>
 								<InputMask
-									mask='+7 (999) 999-99-99'
+									mask='+9 (999) 999-99-99'
 									inputRef={(e) => {
 										field.ref(e)
 										;(inputRef as React.MutableRefObject<HTMLInputElement | null>).current = e

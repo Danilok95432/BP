@@ -28,6 +28,26 @@ export interface DateTimeFormatOptions {
 	timeZone?: string | undefined
 }
 
+export function getYandexMetrikaId(metricCode?: string | null): number | null {
+	if (!metricCode) return null
+
+	// Ищем ID в ym(12345678, "init", ...)
+	const ymInitMatch = metricCode.match(/ym\(\s*(\d+)\s*,\s*['"]init['"]/)
+
+	if (ymInitMatch?.[1]) {
+		return Number(ymInitMatch[1])
+	}
+
+	// Дополнительный fallback: ищем ID в https://mc.yandex.ru/watch/12345678
+	const watchMatch = metricCode.match(/mc\.yandex\.ru\/watch\/(\d+)/)
+
+	if (watchMatch?.[1]) {
+		return Number(watchMatch[1])
+	}
+
+	return null
+}
+
 export const getDayWord = (days: number): string => {
 	if (days % 10 === 1 && days % 100 !== 11) {
 		return 'день'

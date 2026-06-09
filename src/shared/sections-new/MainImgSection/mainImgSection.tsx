@@ -8,9 +8,12 @@ import { MainButton } from 'src/shared/ui/MainButton/MainButton'
 import { SeparatorIconSVG } from 'src/shared/ui/icons/separatorIconSVG'
 import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
 import { useGetSettingsSiteQuery } from 'src/features/home/api/home.api'
+import { useActions } from 'src/app/store/hooks/actions'
+import { BuyTicketModal } from 'src/modals/buy-ticket-modal/buy-ticket-modal'
 
 export const MainImgSection = () => {
 	const { data: settingsData } = useGetSettingsSiteQuery(null)
+	const { openModal } = useActions()
 	const breakPoint = useBreakPoint()
 	return (
 		<Section className={styles.noPadding}>
@@ -34,7 +37,10 @@ export const MainImgSection = () => {
 							)}
 						</FlexRow>
 						{settingsData?.isShowBtnRequest && (
-							<MainButton className={styles.controlBtnSpecial}>
+							<MainButton
+								className={styles.controlBtnSpecial}
+								onClick={() => openModal(<BuyTicketModal id={''} />)}
+							>
 								<div className={styles.customSvgWrapper}>
 									<SeparatorIconSVG color='black' />
 									<SeparatorIconSVG className={styles.smallSvg} color='black' />
