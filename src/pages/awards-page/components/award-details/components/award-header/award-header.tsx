@@ -54,11 +54,11 @@ export const AwardHeader: FC = () => {
 							Подать заявку на участие
 						</MainButton>
 						<p>
-							{`До окончания приема заявок `}
 							{breakPoint === 'S' && <br />}
 							<span>
 								{formatTimeLeft(
 									eventData?.date && eventData?.date.length > 1 ? String(eventData.date[1]) : '',
+									eventData?.date && eventData?.date.length > 1 ? String(eventData.date[0]) : '',
 								)}
 							</span>
 						</p>
@@ -68,14 +68,14 @@ export const AwardHeader: FC = () => {
 						<p className={styles.disc}>
 							Это закрытая номинация <span>(участников выдвигает Экспертный совет).</span>
 						</p>
-						<p className={styles.desc}>
+						{/* <p className={styles.desc}>
 							{`Список участников будет полностью сформирован через `}
 							<span>
 								{formatTimeLeft(
 									eventData?.date && eventData?.date.length > 1 ? String(eventData.date[1]) : '',
 								)}
 							</span>
-						</p>
+						</p> */}
 					</FlexRow>
 				)}
 			</div>

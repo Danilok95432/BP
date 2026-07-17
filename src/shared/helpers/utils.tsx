@@ -118,11 +118,20 @@ export function getTimeLeft(targetDate: string): TimeLeft {
 }
 
 // Функция для форматированного вывода
-export function formatTimeLeft(targetDate: string): string {
+export function formatTimeLeft(targetDate: string, additionalDate?: string): string {
 	const { days, hours, minutes } = getTimeLeft(targetDate)
+	const {
+		days: daysBefore,
+		hours: hoursBefore,
+		minutes: minutesBefore,
+	} = getTimeLeft(additionalDate ?? '')
+
+	if (daysBefore > 0 || hoursBefore > 0 || minutesBefore > 0) {
+		return `Прием заявок еще не начался`
+	}
 
 	if (days === 0 && hours === 0 && minutes === 0) {
-		return 'Время истекло'
+		return 'Прием заявок завершен'
 	}
 
 	const parts = []

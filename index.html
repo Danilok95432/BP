@@ -12,21 +12,17 @@
 							const response = await fetch('https://pabapi.npotau.ru/settings/getinfo');
 							const data = await response.json();
 
-							// Проверяем наличие поля title
 							if (data && data.title) {
 								document.title = data.title;
 							}
 						} catch (error) {
 							console.error('Ошибка при загрузке настроек:', error);
-							// Если ошибка - оставляем исходный title
 						}
 					}
 
-					// Запускаем обновление после загрузки страницы
 					if (document.readyState === 'loading') {
 						document.addEventListener('DOMContentLoaded', updateTitleFromSettings);
 					} else {
-						// DOM уже загружен
 						updateTitleFromSettings();
 					}
 		</script>

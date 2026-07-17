@@ -19,14 +19,21 @@
       margin: 10px 0 0 0;
 		}
 	}
+	.noData {
+		width: 100%;
+		text-align: center;
+		padding: 24px 16px;
+		color: #a3a3a3;
+		font-size: 16px;
+	}
 	.participantsTable {
 		grid-template-columns:
 			minmax(52px, 52px)
-			minmax(311px, 311px)
-			minmax(411px, 411px)
-			minmax(200px, 200px)
-			minmax(200px, 200px)
-			minmax(131px, 131px);
+			minmax(330px, 330px)
+			minmax(301px, 301px)
+			minmax(168px, 168px)
+			minmax(283px, 283px)
+			minmax(171px, 171px);
 		.ageCell {
 			margin-left: 20px;
 		}
@@ -34,6 +41,9 @@
 			width: 100%;
 			margin: 0;
 			text-align: center;
+		}
+		.workTitleCell {
+			color: #3D4BC2;
 		}
 	}
 

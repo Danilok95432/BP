@@ -60,7 +60,7 @@ export const FilterPanel: FC<FilterPanelProps> = ({ options }) => {
 						required
 					/>
 				</div>
-				<div className={cn(styles.searchWrapper, styles.hiddenMobile)}>
+				{/* <div className={cn(styles.searchWrapper, styles.hiddenMobile)}>
 					<MainSelect
 						wrapperClassName={cn(styles.searchSelect)}
 						name='status'
@@ -69,7 +69,7 @@ export const FilterPanel: FC<FilterPanelProps> = ({ options }) => {
 						onChange={(e) => options.setStatus(e.target.value)}
 						required
 					/>
-				</div>
+				</div> */}
 				<MainButton className={styles.hiddenMobile}>Найти</MainButton>
 				<MainButton className={styles.mobileFilters}>
 					<FiltersIconSVG />

@@ -18,31 +18,25 @@ export const AboutLaureats: FC = () => {
 		setActiveYear(newYear)
 	}
 
-	// Формируем список уникальных годов из данных
 	const yearsList = useMemo(() => {
 		if (!laureatsData?.laureats?.length) return []
 
-		// Получаем уникальные года и сортируем по убыванию
 		const years = [...new Set(laureatsData.laureats.map((laureat) => laureat.laureat_year))].sort(
 			(a, b) => Number(b) - Number(a),
 		)
 
-		// Формируем массив объектов с информацией о доступности года
-		// Все года активны, так как они есть в данных
 		return years.map((year) => ({
 			year,
 			isActive: true,
 		}))
 	}, [laureatsData?.laureats])
 
-	// Устанавливаем активный год при первом получении данных
 	useMemo(() => {
 		if (yearsList.length > 0 && !activeYear) {
 			setActiveYear(yearsList[0].year)
 		}
 	}, [yearsList, activeYear])
 
-	// Фильтруем лауреатов по году, совпадающему с activeYear
 	const filteredLaureats = useMemo(() => {
 		if (!laureatsData?.laureats) return []
 		return laureatsData.laureats.filter((laureat) => {

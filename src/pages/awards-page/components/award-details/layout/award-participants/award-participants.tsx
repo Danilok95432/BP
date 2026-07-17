@@ -21,6 +21,7 @@ export interface AwardCard {
 	workForm: WorkForm
 	submittedAt: string
 	status: ApplicationStatus
+	subgenre: string
 }
 
 export const AwardParticipants: FC = () => {
@@ -32,6 +33,7 @@ export const AwardParticipants: FC = () => {
 			workForm: 'Роман',
 			submittedAt: '2024-08-22T08:43:00.000Z',
 			status: 'принята',
+			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
 		},
 		{
 			id: '2',
@@ -40,6 +42,7 @@ export const AwardParticipants: FC = () => {
 			workForm: 'Мини-рассказ',
 			submittedAt: '2024-08-21T14:30:00.000Z',
 			status: 'принята',
+			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
 		},
 		{
 			id: '31',
@@ -48,6 +51,7 @@ export const AwardParticipants: FC = () => {
 			workForm: 'Повесть',
 			submittedAt: '2024-08-20T09:15:00.000Z',
 			status: 'принята',
+			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
 		},
 		{
 			id: '45',
@@ -56,6 +60,7 @@ export const AwardParticipants: FC = () => {
 			workForm: 'Рассказ',
 			submittedAt: '2024-08-19T16:22:00.000Z',
 			status: 'отказ',
+			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
 		},
 		{
 			id: '8',
@@ -64,6 +69,7 @@ export const AwardParticipants: FC = () => {
 			workForm: 'Повесть',
 			submittedAt: '2024-08-18T11:05:00.000Z',
 			status: 'резерв',
+			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
 		},
 		{
 			id: '12',
@@ -72,6 +78,7 @@ export const AwardParticipants: FC = () => {
 			workForm: 'Мини-рассказ',
 			submittedAt: '2024-08-17T13:40:00.000Z',
 			status: 'лонг-лист',
+			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
 		},
 		{
 			id: '125',
@@ -80,6 +87,7 @@ export const AwardParticipants: FC = () => {
 			workForm: 'Рассказ',
 			submittedAt: '2024-08-16T10:30:00.000Z',
 			status: 'лонг-лист',
+			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
 		},
 		{
 			id: '3',
@@ -88,6 +96,7 @@ export const AwardParticipants: FC = () => {
 			workForm: 'Повесть',
 			submittedAt: '2024-08-15T12:25:00.000Z',
 			status: 'шорт-лист',
+			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
 		},
 		{
 			id: '81',
@@ -96,6 +105,7 @@ export const AwardParticipants: FC = () => {
 			workForm: 'Роман',
 			submittedAt: '2024-08-14T15:50:00.000Z',
 			status: 'номинант',
+			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
 		},
 		{
 			id: '26',
@@ -104,6 +114,7 @@ export const AwardParticipants: FC = () => {
 			workForm: 'Повесть',
 			submittedAt: '2024-08-13T09:10:00.000Z',
 			status: 'резерв',
+			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
 		},
 	]
 
@@ -137,9 +148,9 @@ export const AwardParticipants: FC = () => {
 		'ID',
 		'Участник',
 		'Название произведения',
-		'Форма произведения',
+		'Форма работы',
+		'Поджанр работы',
 		'Дата и время подачи',
-		'Статус заявки',
 	]
 	const formatEventsTableData = (participants: AwardCard[]) => {
 		return participants?.map((participantEl) => {
@@ -150,13 +161,15 @@ export const AwardParticipants: FC = () => {
 						{participantEl.id}
 					</p>,
 					<p key='1'>{participantEl.participant}</p>,
-					<p key='2'>{participantEl.workTitle}</p>,
+					<p key='2' className={styles.workTitleCell}>
+						{participantEl.workTitle}
+					</p>,
 					<p key='3'>{participantEl.workForm}</p>,
-					<p key='4'>
-						{formatSingleDate(participantEl.submittedAt ?? new Date())}
+					<p key='4'>{participantEl.subgenre}</p>,
+					<p key='5'>
+						{formatSingleDate(participantEl.submittedAt ?? new Date())}{' '}
 						{parseTimeFromDate(participantEl.submittedAt)}
 					</p>,
-					<p key='5'>{participantEl.status || 'Не указано'}</p>,
 				],
 			}
 		})
@@ -168,24 +181,25 @@ export const AwardParticipants: FC = () => {
 			<div className={styles.headParticipant}>
 				<FilterPanel options={options} />
 			</div>
-			<p className={styles.numberOfFilter}>Всего участников по выбранным фильтрам: 15</p>
+			<p className={styles.numberOfFilter}>Всего участников по выбранным фильтрам: 0</p>
 			{view === 'list' && participants && breakpoint !== 'S' ? (
 				<CustomTable
 					className={styles.participantsTable}
-					rowData={formatEventsTableData(participants ?? [])}
+					rowData={formatEventsTableData([])}
 					colTitles={tableTitles}
 					rowClickHandler={rowClickHandler}
 					initialVisibleRows={3}
 				/>
 			) : (
 				<MobileList
-					items={participants ?? []}
+					items={[]}
 					renderItem={ParticipantCard}
 					classListItems={styles.participantsTab}
 					defaultVisibleCount={3}
 					classNameBtn={styles.showMoreBtnTab}
 				/>
 			)}
+			{<p className={styles.noData}>{'Нет данных'}</p>}
 		</div>
 	)
 }
