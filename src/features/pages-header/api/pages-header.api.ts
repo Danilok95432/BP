@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { MAIN_PROD_URL, ReducerPath } from 'src/shared/helpers/consts'
-import { type PagesHeader } from 'src/types/pages-header'
+import { type LongListResponse, type PagesHeader } from 'src/types/pages-header'
 
 export const pagesHeaderApi = createApi({
 	reducerPath: ReducerPath.PagesHeaderApi,
@@ -17,7 +17,21 @@ export const pagesHeaderApi = createApi({
 				},
 			}),
 		}),
+		getLongList: build.query<
+			LongListResponse,
+			{ id: string; search?: string; searchWorkTitle?: string; workForm?: string }
+		>({
+			query: ({ id, search, searchWorkTitle, workForm }) => ({
+				url: `longlist/getlist`,
+				params: {
+					id,
+					search,
+					searchWorkTitle,
+					workForm,
+				},
+			}),
+		}),
 	}),
 })
 
-export const { useGetPageHeaderQuery } = pagesHeaderApi
+export const { useGetPageHeaderQuery, useGetLongListQuery } = pagesHeaderApi

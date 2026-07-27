@@ -1,4 +1,5 @@
 import { type ImageItemWithText } from './photos'
+import { type SelOption } from './select'
 
 type DocType = {
 	id: string
@@ -16,4 +17,19 @@ export type PagesHeader = {
 	mainphoto: ImageItemWithText[]
 	photoGallery: ImageItemWithText[]
 	documents: DocType[]
+}
+
+export type ParticipantItem = {
+	id: string
+	participant: string
+	subgenre: string
+	submittedAt: string
+	workForm: string
+	workTitle: string
+	status: string
+}
+
+export type LongListResponse = {
+	participants: ParticipantItem[]
+	forms: SelOption[]
 }

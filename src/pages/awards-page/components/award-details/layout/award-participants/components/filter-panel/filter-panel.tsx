@@ -21,6 +21,7 @@ type FilterPanelProps = {
 		setWorkForm: (arg0: string) => void
 		setStatus: (arg0: string) => void
 		setView: (arg0: string) => void
+		selectOptions?: Array<{ label: string; value: string }>
 	}
 }
 
@@ -54,7 +55,7 @@ export const FilterPanel: FC<FilterPanelProps> = ({ options }) => {
 					<MainSelect
 						wrapperClassName={cn(styles.searchSelect)}
 						name='workForm'
-						items={[{ label: 'форма произведения', value: '0' }]}
+						items={options.selectOptions ?? [{ label: 'форма произведения', value: '0' }]}
 						value={options.workForm}
 						onChange={(e) => options.setWorkForm(e.target.value)}
 						required

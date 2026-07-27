@@ -1,131 +1,51 @@
 import { useState, type FC } from 'react'
 
 import styles from './index.module.scss'
-import { useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useBreakPoint } from 'src/features/useBreakPoint/useBreakPoint'
 import { MobileList } from 'src/widgets/mobile-list/mobile-list'
 import { FilterPanel } from './components/filter-panel/filter-panel'
 import { CustomTable } from 'src/widgets/custom-table/custom-table'
 import { formatSingleDate, parseTimeFromDate } from 'src/shared/helpers/utils'
 import { ParticipantCard } from './components/participant-card/participant-card'
-
-type ApplicationStatus = 'принята' | 'отказ' | 'резерв' | 'лонг-лист' | 'шорт-лист' | 'номинант'
-
-// Типы для формы произведения
-type WorkForm = 'Роман' | 'Мини-рассказ' | 'Повесть' | 'Рассказ'
+import { useGetLongListQuery } from 'src/features/pages-header/api/pages-header.api'
 
 export interface AwardCard {
 	id: string
 	participant: string
 	workTitle: string
-	workForm: WorkForm
+	workForm: string
 	submittedAt: string
-	status: ApplicationStatus
+	status: string
 	subgenre: string
 }
 
 export const AwardParticipants: FC = () => {
-	const participants: AwardCard[] = [
-		{
-			id: '563',
-			participant: 'Пузырев Алексей Витальевич',
-			workTitle: 'Длинное название произведения из шести слов',
-			workForm: 'Роман',
-			submittedAt: '2024-08-22T08:43:00.000Z',
-			status: 'принята',
-			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
-		},
-		{
-			id: '2',
-			participant: 'Родионов Илья Тимурович',
-			workTitle: 'Короткое название',
-			workForm: 'Мини-рассказ',
-			submittedAt: '2024-08-21T14:30:00.000Z',
-			status: 'принята',
-			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
-		},
-		{
-			id: '31',
-			participant: 'Балашов Даниил Станиславович',
-			workTitle: 'Кратко',
-			workForm: 'Повесть',
-			submittedAt: '2024-08-20T09:15:00.000Z',
-			status: 'принята',
-			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
-		},
-		{
-			id: '45',
-			participant: 'Ларионов Николай Никитич',
-			workTitle: 'Еще одно длинное название',
-			workForm: 'Рассказ',
-			submittedAt: '2024-08-19T16:22:00.000Z',
-			status: 'отказ',
-			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
-		},
-		{
-			id: '8',
-			participant: 'Тихомиров Даниил Дмитриевич',
-			workTitle: 'Долго думал',
-			workForm: 'Повесть',
-			submittedAt: '2024-08-18T11:05:00.000Z',
-			status: 'резерв',
-			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
-		},
-		{
-			id: '12',
-			participant: 'Кузнецов Максим Егорович',
-			workTitle: 'Берендей и колокольня',
-			workForm: 'Мини-рассказ',
-			submittedAt: '2024-08-17T13:40:00.000Z',
-			status: 'лонг-лист',
-			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
-		},
-		{
-			id: '125',
-			participant: 'Козлов Лев Ильич',
-			workTitle: 'Длинное название произведения из шести слов',
-			workForm: 'Рассказ',
-			submittedAt: '2024-08-16T10:30:00.000Z',
-			status: 'лонг-лист',
-			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
-		},
-		{
-			id: '3',
-			participant: 'Малинин Илья Тихонович',
-			workTitle: 'Длинное название произведения из шести слов',
-			workForm: 'Повесть',
-			submittedAt: '2024-08-15T12:25:00.000Z',
-			status: 'шорт-лист',
-			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
-		},
-		{
-			id: '81',
-			participant: 'Юдина Серафима Ивановна',
-			workTitle: 'Длинное название произведения из шести слов',
-			workForm: 'Роман',
-			submittedAt: '2024-08-14T15:50:00.000Z',
-			status: 'номинант',
-			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
-		},
-		{
-			id: '26',
-			participant: 'Денисова Анастасия Никитична',
-			workTitle: 'Длинное название произведения из шести слов',
-			workForm: 'Повесть',
-			submittedAt: '2024-08-13T09:10:00.000Z',
-			status: 'резерв',
-			subgenre: 'Юмористическая фантастика или юмористическое фэнтези',
-		},
-	]
+	const { id } = useParams()
 
 	const breakpoint = useBreakPoint()
-	const navigate = useNavigate()
 
 	const [searchName, setSearchName] = useState<string>('')
 	const [searchWorkTitle, setWorkTitle] = useState<string>('')
-	const [searchWorkForm, setWorkForm] = useState<string>('0')
+	const [searchWorkForm, setWorkForm] = useState<string>('1')
 	const [searchStatus, setStatus] = useState<string>('0')
 	const [view, setView] = useState<string>('list')
+
+	const forms = [
+		{ id: '1', label: 'Мини-рассказ, от 4 000 до 5 000 символов' },
+		{ id: '2', label: 'Рассказ, от 5 000 до 30 000 символов' },
+		{ id: '3', label: 'Повесть, от 30 000 символов до 6 авторских листов' },
+		{ id: '4', label: 'Роман, от 10 до 15 авторских листов' },
+	]
+
+	const searchForm = forms.findIndex((el) => el.label === searchWorkForm)
+
+	const { data } = useGetLongListQuery({
+		id: id ?? '',
+		search: searchName,
+		searchWorkTitle,
+		workForm: searchForm === -1 ? '1' : String(searchForm + 1),
+	})
 
 	const options = {
 		name: searchName,
@@ -138,10 +58,7 @@ export const AwardParticipants: FC = () => {
 		setStatus,
 		view,
 		setView,
-	}
-
-	const rowClickHandler = (id: string) => {
-		navigate(`/participants/${id}`)
+		selectOptions: data?.forms,
 	}
 
 	const tableTitles = [
@@ -181,25 +98,25 @@ export const AwardParticipants: FC = () => {
 			<div className={styles.headParticipant}>
 				<FilterPanel options={options} />
 			</div>
-			<p className={styles.numberOfFilter}>Всего участников по выбранным фильтрам: 0</p>
-			{view === 'list' && participants && breakpoint !== 'S' ? (
+			<p className={styles.numberOfFilter}>
+				Всего участников по выбранным фильтрам: {data?.participants?.length}
+			</p>
+			{view === 'list' && data?.participants && breakpoint !== 'S' ? (
 				<CustomTable
 					className={styles.participantsTable}
-					rowData={formatEventsTableData([])}
+					rowData={formatEventsTableData(data?.participants ?? [])}
 					colTitles={tableTitles}
-					rowClickHandler={rowClickHandler}
 					initialVisibleRows={3}
 				/>
 			) : (
 				<MobileList
-					items={[]}
+					items={data?.participants ?? []}
 					renderItem={ParticipantCard}
 					classListItems={styles.participantsTab}
 					defaultVisibleCount={3}
 					classNameBtn={styles.showMoreBtnTab}
 				/>
 			)}
-			{<p className={styles.noData}>{'Нет данных'}</p>}
 		</div>
 	)
 }
