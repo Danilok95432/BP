@@ -27,24 +27,15 @@ export const AwardParticipants: FC = () => {
 
 	const [searchName, setSearchName] = useState<string>('')
 	const [searchWorkTitle, setWorkTitle] = useState<string>('')
-	const [searchWorkForm, setWorkForm] = useState<string>('1')
+	const [searchWorkForm, setWorkForm] = useState<string>('0')
 	const [searchStatus, setStatus] = useState<string>('0')
 	const [view, setView] = useState<string>('list')
-
-	const forms = [
-		{ id: '1', label: 'Мини-рассказ, от 4 000 до 5 000 символов' },
-		{ id: '2', label: 'Рассказ, от 5 000 до 30 000 символов' },
-		{ id: '3', label: 'Повесть, от 30 000 символов до 6 авторских листов' },
-		{ id: '4', label: 'Роман, от 10 до 15 авторских листов' },
-	]
-
-	const searchForm = forms.findIndex((el) => el.label === searchWorkForm)
 
 	const { data } = useGetLongListQuery({
 		id: id ?? '',
 		search: searchName,
 		searchWorkTitle,
-		workForm: searchForm === -1 ? '1' : String(searchForm + 1),
+		workForm: searchWorkForm,
 	})
 
 	const options = {
