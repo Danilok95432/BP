@@ -1,0 +1,63 @@
+.participantsSection {
+	margin-bottom: 32px;
+  @media (max-width: 768px) {
+    padding-right: 24px;
+  }
+	h4 {
+		font-size: 24px;
+		font-weight: 700;
+		margin-bottom: 20px;
+	}
+	.numberOfFilter {
+		margin: 10px 0 20px 0;
+		font-size: 18px;
+		@media (max-width: 768px) {
+			display: block;
+			width: 100%;
+			border-bottom: 1px solid #e1e1e1;
+			padding-bottom: 24px;
+      margin: 10px 0 0 0;
+		}
+	}
+	.noData {
+		width: 100%;
+		text-align: center;
+		padding: 24px 16px;
+		color: #a3a3a3;
+		font-size: 16px;
+	}
+	.participantsTable {
+		grid-template-columns:
+			minmax(52px, 52px)
+			minmax(330px, 330px)
+			minmax(301px, 301px)
+			minmax(168px, 168px)
+			minmax(283px, 283px)
+			minmax(171px, 171px);
+		.ageCell {
+			margin-left: 20px;
+		}
+		.idCell {
+			width: 100%;
+			margin: 0;
+			text-align: center;
+		}
+	}
+
+	.participantsTab {
+		display: grid;
+		grid-template: auto / repeat(auto-fit, minmax(423px, 423px));
+		gap: 25px;
+		margin: 0 0 30px 0;
+		@media (max-width: 768px) {
+			grid-template: auto / repeat(auto-fit, minmax(300px, 423px));
+      gap: 0;
+		}
+	}
+
+	.showMoreBtnTab {
+		margin: 0;
+    padding: 12px 0;
+    width: 100%;
+	}
+}

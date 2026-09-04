@@ -9,6 +9,12 @@ export const getMenuItems = (data?: EventItem) => {
 			link: 'participants',
 		})
 	}
+	if (data?.event_type_name === 'открытая') {
+		items.push({
+			title: 'Шорт-лист номинации',
+			link: 'short-participants',
+		})
+	}
 	items.push({
 		title: 'Правила отбора',
 		link: 'rules',

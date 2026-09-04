@@ -8,7 +8,7 @@ import { FilterPanel } from './components/filter-panel/filter-panel'
 import { CustomTable } from 'src/widgets/custom-table/custom-table'
 import { formatSingleDate, parseTimeFromDate } from 'src/shared/helpers/utils'
 import { ParticipantCard } from './components/participant-card/participant-card'
-import { useGetLongListQuery } from 'src/features/pages-header/api/pages-header.api'
+import { useGetShortListQuery } from 'src/features/pages-header/api/pages-header.api'
 
 export interface AwardCard {
 	id: string
@@ -20,7 +20,7 @@ export interface AwardCard {
 	subgenre: string
 }
 
-export const AwardParticipants: FC = () => {
+export const AwardShortParticipants: FC = () => {
 	const { id } = useParams()
 
 	const breakpoint = useBreakPoint()
@@ -31,7 +31,7 @@ export const AwardParticipants: FC = () => {
 	const [searchStatus, setStatus] = useState<string>('0')
 	const [view, setView] = useState<string>('list')
 
-	const { data } = useGetLongListQuery({
+	const { data } = useGetShortListQuery({
 		id: id ?? '',
 		search: searchName,
 		searchWorkTitle,

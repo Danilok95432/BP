@@ -30,6 +30,7 @@ import { FondDocs } from 'src/pages/fond-page/layout/docs/docs'
 import { BelyaevPage } from 'src/pages/belyaev-page/belyaev-page'
 import { Belyaev } from 'src/pages/belyaev-page/components/belyaev'
 import { FondCredits } from 'src/pages/fond-page/layout/credits/credits'
+import { AwardShortParticipants } from 'src/pages/awards-page/components/award-details/layout/awart-short-list/award-short-participants'
 
 export const MainRoutes = () => {
 	return (
@@ -67,6 +68,7 @@ export const MainRoutes = () => {
 					<Route path=':id' element={<AwardLayout />}>
 						<Route index element={<AwardInfo />} />
 						<Route path={`participants`} element={<AwardParticipants />} />
+						<Route path={`short-participants`} element={<AwardShortParticipants />} />
 						<Route path={`rules`} element={<AwardRules />} />
 						<Route path={`docs`} element={<AwardDocs />} />
 						<Route path={`experts`} element={<AwardExperts />} />

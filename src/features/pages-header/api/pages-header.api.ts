@@ -31,7 +31,21 @@ export const pagesHeaderApi = createApi({
 				},
 			}),
 		}),
+		getShortList: build.query<
+			LongListResponse,
+			{ id: string; search?: string; searchWorkTitle?: string; workForm?: string }
+		>({
+			query: ({ id, search, searchWorkTitle, workForm }) => ({
+				url: `shortlist/getlist`,
+				params: {
+					id,
+					search,
+					searchWorkTitle,
+					workForm,
+				},
+			}),
+		}),
 	}),
 })
 
-export const { useGetPageHeaderQuery, useGetLongListQuery } = pagesHeaderApi
+export const { useGetPageHeaderQuery, useGetLongListQuery, useGetShortListQuery } = pagesHeaderApi
